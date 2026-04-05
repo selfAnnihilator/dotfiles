@@ -135,7 +135,7 @@ config.set('content.headers.user_agent', 'Mozilla/5.0 ({os_info}; rv:145.0) Geck
 # increased compatibility.  Note that the value read from JavaScript is
 # always the global value.
 # Type: FormatString
-config.set('content.headers.user_agent', 'Mozilla/5.0 ({os_info}) AppleWebKit/{webkit_version} (KHTML, like Gecko) {qt_key}/{qt_version} {upstream_browser_key}/{upstream_browser_version_short} Safari/{webkit_version}', 'https://gitlab.gnome.org/*')
+# config.set('content.headers.user_agent', 'Mozilla/5.0 ({os_info}) AppleWebKit/{webkit_version} (KHTML, like Gecko) {qt_key}/{qt_version} {upstream_browser_key}/{upstream_browser_version_short} Safari/{webkit_version}', 'https://gitlab.gnome.org/*')
 
 # Load images automatically in web pages.
 # Type: Bool
@@ -245,9 +245,32 @@ c.completion.open_categories = ['searchengines', 'quickmarks', 'bookmarks', 'his
 c.auto_save.session = False # save tabs on quit/restart
 c.session.lazy_restore = True
 
+# hint configuration
+c.hints.chars = "arstneio"
+c.hints.min_chars = 1
+
+c.colors.hints.bg = "#1e1e2e"
+c.colors.hints.fg = "#cdd6f4"
+c.colors.hints.match.fg = "#f38ba8"
+
+c.hints.border = "1px solid #89b4fa"
+c.hints.padding = {"top": 2, "bottom": 2, "left": 4, "right": 4}
+
+c.hints.scatter = True
+c.hints.auto_follow = "unique-match"
+c.hints.selectors = {
+    "all": [
+        "a[href]",          # links only
+        "button",           # buttons
+        "input:not([type=hidden])",  # visible inputs
+        "textarea",
+        "select"
+    ]
+}
+
 # keybinding changes
 config.bind('=', 'cmd-set-text -s :open')
-config.bind('h', 'history')
+# config.bind('h', 'history')
 config.bind('cc', 'hint images spawn sh -c "cliphist link {hint-url}"')
 config.bind('cs', 'cmd-set-text -s :config-source')
 config.bind('M', 'hint links spawn mpv {hint-url}')
@@ -268,6 +291,11 @@ config.bind('gK', 'tab-move -')
 config.bind('gm', 'tab-move')
 config.bind(',p', 'spawn --userscript pass-type-password')
 config.bind(',u', 'spawn --userscript pass-type-username')
+config.bind(',h', 'history')
+config.bind(',ba', 'bookmark-add')
+
+# unbind
+# config.unbind('h')
 
 # dark mode setup
 c.colors.webpage.darkmode.enabled = True
