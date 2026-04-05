@@ -363,3 +363,6 @@ c.qt.args = ["--disable-logging", "--disable-extensions"]
 
 # Enable GPU acceleration
 c.qt.args += ["--enable-gpu-rasterization", "--ignore-gpu-blocklist"]
+
+c.messages.timeout = 5000
+c.downloads.remove_finished = 5000
