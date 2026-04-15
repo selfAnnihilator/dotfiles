@@ -258,15 +258,15 @@ c.hints.padding = {"top": 2, "bottom": 2, "left": 4, "right": 4}
 
 c.hints.scatter = True
 c.hints.auto_follow = "unique-match"
-c.hints.selectors = {
-    "all": [
-        "a[href]",          # links only
-        "button",           # buttons
-        "input:not([type=hidden])",  # visible inputs
-        "textarea",
-        "select"
-    ]
-}
+# c.hints.selectors = {
+#     "all": [
+#         "a[href]",          # links only
+#         "button",           # buttons
+#         "input:not([type=hidden])",  # visible inputs
+#         "textarea",
+#         "select"
+#     ]
+# }
 
 # keybinding changes
 config.bind('=', 'cmd-set-text -s :open')
@@ -275,7 +275,7 @@ config.bind('cc', 'hint images spawn sh -c "cliphist link {hint-url}"')
 config.bind('cs', 'cmd-set-text -s :config-source')
 config.bind('M', 'hint links spawn mpv {hint-url}')
 config.bind('Z', 'hint links spawn st -e youtube-dl {hint-url}')
-config.bind('t', 'set-cmd-text -s :open -t')
+config.bind('t', 'cmd-set-text -s :open -t')
 config.bind('xb', 'config-cycle statusbar.show always never')
 config.bind('xt', 'config-cycle tabs.show always never')
 config.bind('xx', 'config-cycle statusbar.show always never;; config-cycle tabs.show always never')
@@ -291,6 +291,7 @@ config.bind('gK', 'tab-move -')
 config.bind('gm', 'tab-move')
 config.bind(',p', 'spawn --userscript pass-type-password')
 config.bind(',u', 'spawn --userscript pass-type-username')
+config.bind(',t', 'spawn --userscript translate')
 config.bind(',h', 'history')
 config.bind(',ba', 'bookmark-add')
 
