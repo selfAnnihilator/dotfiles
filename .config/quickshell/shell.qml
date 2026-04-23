@@ -124,7 +124,7 @@ ShellRoot {
         anchors.top: true
         anchors.left: true
         implicitWidth: 120
-        implicitHeight: 58
+        implicitHeight: 52
         color: "transparent"
         exclusiveZone: 0
 
@@ -158,10 +158,10 @@ ShellRoot {
             id: statusPill
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 12
+            anchors.topMargin: 10
 
-            width: 100
-            height: 34
+            width: 96
+            height: 30
             radius: 999
             color: Theme.surface
             border.color: Theme.border
@@ -188,7 +188,7 @@ ShellRoot {
                 spacing: 12
 
                 Item {
-                    width: 22; height: 22
+                    width: 20; height: 20
                     anchors.verticalCenter: parent.verticalCenter
 
                     Canvas {
@@ -215,7 +215,7 @@ ShellRoot {
                     Text {
                         anchors.centerIn: parent
                         text: "󰕾"
-                        font.pixelSize: 9
+                        font.pixelSize: 8
                         font.family: "JetBrains Mono"
                         color: Theme.accent
                     }
@@ -227,7 +227,7 @@ ShellRoot {
                         background: Rectangle { color: Theme.surface; radius: 6 }
                         contentItem: Text {
                             text: Math.round(statusPill.playerVolume * 100) + "%"
-                            color: Theme.text; font.pixelSize: 11; font.family: "JetBrains Mono"
+                            color: Theme.text; font.pixelSize: 10; font.family: "JetBrains Mono"
                         }
                     }
 
@@ -252,7 +252,7 @@ ShellRoot {
 
                 Item {
                     id: networkIconItem
-                    width: 22; height: 22
+                    width: 20; height: 20
                     anchors.verticalCenter: parent.verticalCenter
 
                     Text {
@@ -263,7 +263,7 @@ ShellRoot {
                             if (statusPill.networkType === "wired") return "󰈀"
                             return "󰤭"
                         }
-                        font.pixelSize: 14
+                        font.pixelSize: 13
                         font.family: "JetBrains Mono"
                         color: statusPill.networkConnected ? Theme.text : Theme.danger
                     }
@@ -280,7 +280,7 @@ ShellRoot {
                         contentItem: Text {
                             text: networkTooltip.text
                             color: Theme.text
-                            font.pixelSize: 11
+                            font.pixelSize: 10
                             font.family: "JetBrains Mono"
                         }
                     }
@@ -382,10 +382,10 @@ ShellRoot {
             id: pill
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 12
+            anchors.topMargin: 10
 
             width: {
-                if (islandState === "idle")          return pill.musicPlaying ? 200 : 180
+                if (islandState === "idle")          return pill.musicPlaying ? 180 : 162
                 if (islandState === "hub")           return 360  // wider: 6 buttons now
                 if (islandState === "power")         return 280
                 if (islandState === "wallpaper")     return 400
@@ -397,7 +397,7 @@ ShellRoot {
                 return 320
             }
             height: {
-                if (islandState === "idle")          return 34
+                if (islandState === "idle")          return 30
                 if (islandState === "hub")           return 76
                 if (islandState === "power")         return 76
                 if (islandState === "wallpaper")     return 460
@@ -631,13 +631,13 @@ ShellRoot {
 
                         Text {
                             id: hoursText
-                            color: Theme.text; font.pixelSize: 18; font.family: "JetBrains Mono"
+                            color: Theme.text; font.pixelSize: 16; font.family: "JetBrains Mono"
                             text: Qt.formatTime(new Date(), "hh")
                             anchors.verticalCenter: parent.verticalCenter
                         }
                         Text {
                             id: colonText
-                            color: Theme.text; font.pixelSize: 18; font.family: "JetBrains Mono"
+                            color: Theme.text; font.pixelSize: 16; font.family: "JetBrains Mono"
                             text: ":"
                             anchors.verticalCenter: parent.verticalCenter
                             SequentialAnimation on opacity {
@@ -648,7 +648,7 @@ ShellRoot {
                         }
                         Text {
                             id: minutesText
-                            color: Theme.text; font.pixelSize: 18; font.family: "JetBrains Mono"
+                            color: Theme.text; font.pixelSize: 16; font.family: "JetBrains Mono"
                             text: Qt.formatTime(new Date(), "mm")
                             anchors.verticalCenter: parent.verticalCenter
                         }
@@ -1404,7 +1404,7 @@ ShellRoot {
         anchors.top: true
         anchors.left: true
         implicitWidth: 120
-        implicitHeight: 58
+        implicitHeight: 52
         color: "transparent"
         exclusiveZone: 0
 
@@ -1438,9 +1438,9 @@ ShellRoot {
             id: statsPill
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 12
+            anchors.topMargin: 10
 
-            width: 100; height: 34; radius: 999
+            width: 96; height: 30; radius: 999
             color: Theme.surface
             border.color: Theme.border
             border.width: 1
@@ -1493,14 +1493,14 @@ ShellRoot {
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
                         text: statsPill.weatherIcon
-                        font.pixelSize: 14
+                        font.pixelSize: 13
                         font.family: "JetBrains Mono"
                         color: Theme.accent
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
                         text: Math.round(statsPill.weatherTemp) + "°"
-                        font.pixelSize: 11
+                        font.pixelSize: 10
                         font.family: "JetBrains Mono"
                         color: Theme.text
                     }
@@ -1529,14 +1529,14 @@ ShellRoot {
                                 if (p >= 10) return "󰁺"
                                 return "󰂃"
                             }
-                            font.pixelSize: 14
+                            font.pixelSize: 13
                             font.family: "JetBrains Mono"
                             color: statsPill.batteryPercent <= 20 && !statsPill.batteryCharging && !statsPill.batteryPluggedNotCharging ? Theme.danger : Theme.accentAlt
                         }
                         Text {
                             anchors.verticalCenter: parent.verticalCenter
                             text: statsPill.batteryPercent + "%"
-                            font.pixelSize: 11
+                            font.pixelSize: 10
                             font.family: "JetBrains Mono"
                             color: Theme.text
                         }
