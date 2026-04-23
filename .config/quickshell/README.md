@@ -8,7 +8,7 @@ A macOS Dynamic Island-inspired bar for [Omarchy](https://omarchy.org) — the H
 
 ## Preview
 
-![Preview](preview.png)
+![Preview](./preview.png)
 
 The bar lives at the top of the screen as three floating pills:
 
