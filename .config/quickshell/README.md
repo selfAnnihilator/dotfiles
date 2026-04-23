@@ -2,9 +2,13 @@
 
 A macOS Dynamic Island-inspired bar for [Omarchy](https://omarchy.org) — the Hyprland-based desktop built on Arch Linux. Built with [Quickshell](https://quickshell.outfoxxed.me).
 
+> **Based on [Dynamic-Bar](https://github.com/turbogoomba/Dynamic-Bar) by turbogoomba.** Adapted for Omarchy (1920×1080), with iwd networking, PipeWire cava, generic MPRIS support, battery status, and various fixes and extensions.
+
 ---
 
 ## Preview
+
+![Dynamic Island Bar](screenrecording-2026-04-23_09-56-38.gif)
 
 The bar lives at the top of the screen as three floating pills:
 
