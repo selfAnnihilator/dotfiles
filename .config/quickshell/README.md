@@ -8,8 +8,6 @@ A macOS Dynamic Island-inspired bar for [Omarchy](https://omarchy.org) — the H
 
 ## Preview
 
-![Dynamic Island Bar](preview.gif)
-
 The bar lives at the top of the screen as three floating pills:
 
 - **Left pill** — volume and network status
