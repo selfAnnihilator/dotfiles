@@ -68,7 +68,8 @@ paru -S quickshell-git cava
 
 ### 2. Clone the config
 ```sh
-git clone <repo-url> ~/.config/quickshell
+git clone https://github.com/selfAnnihilator/dotfiles /tmp/dotfiles
+cp -r /tmp/dotfiles/.config/quickshell ~/.config/quickshell
 ```
 
 ### 3. Set up the cava config
