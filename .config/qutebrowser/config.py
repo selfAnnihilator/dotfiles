@@ -365,8 +365,10 @@ c.content.blocking.method = 'adblock' # uncomment this if you install python-adb
 # Reduce disk cache overhead
 c.qt.args = ["--disable-logging", "--disable-extensions"]
 
-# Enable GPU acceleration
-c.qt.args += ["--enable-gpu-rasterization", "--ignore-gpu-blocklist"]
+c.qt.args += [
+    "--disable-gpu-compositing",
+    "--disable-features=VaapiVideoDecoder,VaapiVideoDecodeLinuxGL,VaapiVideoEncoder",
+]
 
 c.messages.timeout = 5000
 c.downloads.remove_finished = 5000

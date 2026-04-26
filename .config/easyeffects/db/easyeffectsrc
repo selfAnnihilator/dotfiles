@@ -15,5 +15,6 @@ visiblePlugin=bass_loudness#0
 [Window]
 autostartOnLogin=true
 height=1015
-visiblePresetSheetPage=autoloadingPage
-width=1888
+showTrayIcon=false
+visiblePresetSheetPage=communityPage
+width=936
