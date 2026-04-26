@@ -7,6 +7,4 @@
 config_version: 2
 settings:
   content.javascript.clipboard:
-    https://duckduckgo.com: access-paste
-  statusbar.show:
-    global: never
+    https://github.com: access-paste
