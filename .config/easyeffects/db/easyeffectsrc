@@ -5,16 +5,14 @@ lastLoadedOutputPreset=Music
 inputDevice=alsa_input.pci-0000_00_1f.3.analog-stereo
 
 [StreamOutputs]
-mostUsedPresets=Laptop,Music
+mostUsedPresets=Music,Laptop
 outputDevice=alsa_output.pci-0000_00_1f.3.analog-stereo
 plugins=bass_loudness#0,equalizer#0,maximizer#0
-usedPresets=Music:24,Laptop:26
+usedPresets=Music:27,Laptop:26
 visiblePage=pluginsPage
 visiblePlugin=bass_loudness#0
 
 [Window]
 autostartOnLogin=true
 height=1015
-showTrayIcon=false
-visiblePresetSheetPage=communityPage
 width=936
