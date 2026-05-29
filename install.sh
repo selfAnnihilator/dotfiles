@@ -40,7 +40,7 @@ yay -S --needed --noconfirm \
     xdg-desktop-portal-gnome \
     hypridle \
     swaybg \
-    kitty \
+    foot \
     fuzzel \
     jq \
     polkit-gnome \
