@@ -1,4 +1,5 @@
-source /usr/share/cachyos-fish-config/cachyos-config.fish
+test -f /usr/share/cachyos-fish-config/cachyos-config.fish \
+    && source /usr/share/cachyos-fish-config/cachyos-config.fish
 
 set -gx ZANKEN_PATH $HOME/zanken
 # Force override bin first — fish_add_path skips already-present paths so use

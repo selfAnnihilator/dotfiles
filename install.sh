@@ -70,6 +70,7 @@ yay -S --needed --noconfirm --overwrite='*' --ask=4 \
     gamemode \
     ufw \
     ttf-jetbrains-mono-nerd \
+    noto-fonts-cjk \
     qutebrowser \
     python-adblock \
     qt6-multimedia-ffmpeg \
@@ -242,7 +243,7 @@ mkdir -p "$HOME/.config/mako"
 ln -snf "$HOME/.config/zanken/current/theme/mako.ini" "$HOME/.config/mako/config"
 
 # Wallpapers → ~/Pictures/wallpapers/<theme>/
-# Backgrounds are not tracked in git; install.sh seeds them from zanken/themes
+# Backgrounds are tracked in zanken/themes/*/backgrounds/; install.sh seeds them
 info "Seeding wallpapers to ~/Pictures/wallpapers/..."
 mkdir -p "$HOME/Pictures/wallpapers"
 for theme_dir in "$HOME/zanken/themes"/*/; do
@@ -294,6 +295,7 @@ sudo tee /etc/NetworkManager/conf.d/wifi_backend.conf > /dev/null <<'EOF'
 wifi.backend=iwd
 EOF
 sudo systemctl enable --now NetworkManager iwd bluetooth 2>/dev/null || true
+sudo systemctl set-default graphical.target
 sudo systemctl enable sddm 2>/dev/null || true  # starts on next boot only
 
 info "Enabling user services..."

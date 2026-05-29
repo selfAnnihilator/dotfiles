@@ -46,7 +46,7 @@ Item {
         sealRaw.a
     )
 
-    readonly property string serif: "serif"
+    readonly property string serif: "Noto Serif CJK JP"
     property  string mono:  "JetBrainsMono Nerd Font"
 
     readonly property string monoFontPath: Quickshell.env("HOME") + "/.config/zanken/current/mono-font"
