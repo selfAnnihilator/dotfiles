@@ -110,7 +110,6 @@ const omarchyItems = [
 
     // ----- Style -----
     { title: "Theme",            icon: "󰸌", category: "Style",   keywords: "theme color palette dark light mode appearance look style scheme switcher kanagawa tokyo dragon nord gruvbox", exec: "qs -c desktop ipc call palette openCategory \"Themes\"" },
-    { title: "SDDM Theme",      icon: "󰌾", category: "Style",   keywords: "sddm lock screen login theme qylock lockscreen pixel anime",                                            exec: "qs -c desktop ipc call palette openCategory \"Lock Theme\"" },
     { title: "Background",       icon: "󰸉", category: "Style",   keywords: "background wallpaper image desktop picture backdrop bg",                                                 exec: "omarchy-theme-bg-switcher" },
     { title: "Font",             icon: "󰛖", category: "Style",   keywords: "font typeface monospace typography family character glyph nerd",                                        exec: "omarchy-font-pick", tui: "omarchy-launch-tui" },
     { title: "Round Corners",    icon: "󰘇", category: "Style",   keywords: "corners radius round soft rounded border edge shape navbar cloud popup",                              exec: "qs -c desktop ipc call corners round" },
