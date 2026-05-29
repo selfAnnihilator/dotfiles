@@ -108,6 +108,7 @@ const omarchyItems = [
 
     // ----- Style -----
     { title: "Theme",            icon: "󰸌", category: "Style",   keywords: "theme color palette dark light mode appearance look style scheme switcher kanagawa tokyo dragon nord gruvbox", exec: "qs -c desktop ipc call palette openCategory \"Themes\"" },
+    { title: "SDDM Theme",      icon: "󰌾", category: "Style",   keywords: "sddm lock screen login theme qylock lockscreen pixel anime",                                            exec: "omarchy-qylock-theme-set" },
     { title: "Background",       icon: "󰸉", category: "Style",   keywords: "background wallpaper image desktop picture backdrop bg",                                                 exec: "omarchy-theme-bg-switcher" },
     { title: "Font",             icon: "󰛖", category: "Style",   keywords: "font typeface monospace typography family character glyph nerd",                                        exec: "omarchy-font-pick", tui: "omarchy-launch-tui" },
     { title: "Round Corners",    icon: "󰘇", category: "Style",   keywords: "corners radius round soft rounded border edge shape navbar cloud popup",                              exec: "qs -c desktop ipc call corners round" },
@@ -117,6 +118,7 @@ const omarchyItems = [
 { title: "Enable Hibernate",     icon: "󰤁", category: "Setup",   keywords: "hibernate enable setup swap sleep power disk s4",                                                  exec: "omarchy-hibernation-setup",  tui: "omarchy-launch-floating-terminal-with-presentation" },
     { title: "Disable Hibernate",    icon: "󰤁", category: "Setup",   keywords: "hibernate disable remove swap sleep power",                                                             exec: "omarchy-hibernation-remove", tui: "omarchy-launch-floating-terminal-with-presentation" },
     { title: "Niri Config",          icon: "󰢨", category: "Setup",   keywords: "niri compositor config window manager kdl edit settings",                                              exec: "omarchy-launch-editor ~/.config/niri/config.kdl" },
+    { title: "Default: Qutebrowser", icon: "󰖟", category: "Setup",   keywords: "default browser set qutebrowser keyboard vim",                                                             exec: "omarchy-default-browser qutebrowser" },
     { title: "Default: Chrome",      icon: "󰊯", category: "Setup",   keywords: "default browser set chrome google chromium",                                                           exec: "omarchy-default-browser chrome" },
     { title: "Default: Brave",       icon: "󰖟", category: "Setup",   keywords: "default browser set brave",                                                                            exec: "omarchy-default-browser brave" },
     { title: "Default: Firefox",     icon: "󰈹", category: "Setup",   keywords: "default browser set firefox",                                                                          exec: "omarchy-default-browser firefox" },
