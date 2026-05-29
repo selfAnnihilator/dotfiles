@@ -130,9 +130,9 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     // Terminal
-    Mod+Return { spawn "foot"; }
-    Mod+T { spawn "foot"; }
-    Mod+Alt+Return { spawn "foot" "-e" "tmux" "new-session" "-A" "-s" "main"; }
+    Mod+Return { spawn "kitty"; }
+    Mod+T { spawn "kitty"; }
+    Mod+Alt+Return { spawn "kitty" "tmux" "new-session" "-A" "-s" "main"; }
 
     // Browser / file manager / editor
     Mod+Shift+Return { spawn "omarchy-launch-browser"; }
@@ -364,7 +364,7 @@ binds {
     Mod+Ctrl+Alt+W { spawn "omarchy-notification-weather"; }
 
     // Btop activity monitor
-    Mod+Ctrl+T { spawn "foot" "-e" "btop"; }
+    Mod+Ctrl+T { spawn "kitty" "btop"; }
 
     // Session
 
@@ -374,8 +374,8 @@ binds {
     // ── Jarvis AI Assistant ──────────────────────────────────────────────
     // Voice trigger: Copilot/AI key (XF86Launch1) or Mod+Alt+J fallback
     // Records mic until silence, transcribes with Whisper, responds in a terminal
-    XF86Launch1 { spawn "foot" "--app-id=com.jarvis.voice" "-e" "/home/abhi/code/project/new/.venv/bin/jarvis" "--voice-trigger"; }
-    Mod+Alt+J   { spawn "foot" "--app-id=com.jarvis.voice" "-e" "/home/abhi/code/project/new/.venv/bin/jarvis" "--voice-trigger"; }
+    XF86Launch1 { spawn "kitty" "--class" "com.jarvis.voice" "/home/abhi/code/project/new/.venv/bin/jarvis" "--voice-trigger"; }
+    Mod+Alt+J   { spawn "kitty" "--class" "com.jarvis.voice" "/home/abhi/code/project/new/.venv/bin/jarvis" "--voice-trigger"; }
 }
 
 // ── Jarvis window rules ──────────────────────────────────────────────────
