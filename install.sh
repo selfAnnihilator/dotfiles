@@ -55,7 +55,12 @@ yay -S --needed --noconfirm \
     bluez-utils \
     ttf-jetbrains-mono-nerd \
     qutebrowser \
-    python-adblock
+    python-adblock \
+    qt6-multimedia-ffmpeg \
+    gst-plugins-base \
+    gst-plugins-good \
+    gst-plugins-bad \
+    gst-plugins-ugly
 ok "Packages installed"
 
 # ── 4. Zanken scripts layer ──────────────────────────────────────
@@ -108,7 +113,34 @@ if command -v fish &>/dev/null; then
     fi
 fi
 
-# ── 7. Systemd user services ─────────────────────────────────────
+# ── 7. qylock lockscreen ─────────────────────────────────────────
+if [ ! -d "$HOME/.local/share/qylock" ]; then
+    info "Cloning qylock..."
+    git clone https://github.com/Darkkal44/qylock "$HOME/.local/share/qylock"
+    ok "qylock ready"
+fi
+ln -sfn "$HOME/.local/share/qylock/themes" \
+    "$HOME/.local/share/qylock/quickshell-lockscreen/themes_link"
+
+mkdir -p "$HOME/.config/qylock"
+[ -f "$HOME/.config/qylock/theme" ] || echo "pixel-night-city" > "$HOME/.config/qylock/theme"
+
+# PAM config for quickshell auth
+if [ ! -f /etc/pam.d/quickshell ]; then
+    printf 'auth\tinclude\tlogin\naccount\tinclude\tlogin\n' | sudo tee /etc/pam.d/quickshell > /dev/null
+fi
+
+# SDDM theme
+QYLOCK_THEME=$(cat "$HOME/.config/qylock/theme")
+sudo mkdir -p /usr/share/sddm/themes
+sudo cp -r "$HOME/.local/share/qylock/themes/$QYLOCK_THEME" /usr/share/sddm/themes/
+sudo tee /etc/sddm.conf.d/theme.conf > /dev/null <<EOF
+[Theme]
+Current=$QYLOCK_THEME
+EOF
+ok "qylock lockscreen configured"
+
+# ── 8. Systemd user services ─────────────────────────────────────
 info "Enabling user services..."
 systemctl --user enable --now pipewire pipewire-pulse wireplumber 2>/dev/null || true
 sudo systemctl enable --now NetworkManager bluetooth 2>/dev/null || true
