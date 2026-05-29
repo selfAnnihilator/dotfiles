@@ -182,7 +182,7 @@ fi
 
 # SDDM theme
 QYLOCK_THEME=$(cat "$HOME/.config/qylock/theme")
-sudo mkdir -p /usr/share/sddm/themes
+sudo mkdir -p /usr/share/sddm/themes /etc/sddm.conf.d
 sudo cp -r "$HOME/.local/share/qylock/themes/$QYLOCK_THEME" /usr/share/sddm/themes/
 sudo tee /etc/sddm.conf.d/theme.conf > /dev/null <<EOF
 [Theme]
