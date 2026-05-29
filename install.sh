@@ -238,6 +238,10 @@ ZANKEN_THEME_SKIP_BACKGROUND=1 "$HOME/zanken/bin/zanken-theme-set" "tokyo-night"
 # Default mono font for quickshell bar icons (written by zanken-font-set normally)
 printf 'JetBrainsMono Nerd Font' > "$HOME/.config/zanken/current/mono-font"
 
+# Default corners to round so the bar floats on first boot
+mkdir -p "$HOME/.local/state/quickshell-desktop"
+printf 'round' > "$HOME/.local/state/quickshell-desktop/corners"
+
 # Btop theme symlink
 mkdir -p "$HOME/.config/btop/themes"
 ln -snf "$HOME/.config/zanken/current/theme/btop.theme" "$HOME/.config/btop/themes/current.theme"
