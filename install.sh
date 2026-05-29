@@ -124,7 +124,7 @@ if [ ! -d "$HOME/zanken" ]; then
 else
     info "Resetting zanken to latest..."
     git -C "$HOME/zanken" fetch origin
-    git -C "$HOME/zanken" reset --hard "origin/$(git -C "$HOME/zanken" rev-parse --abbrev-ref HEAD)"
+    git -C "$HOME/zanken" reset --hard FETCH_HEAD
     git -C "$HOME/zanken" clean -fd
 fi
 ok "zanken ready"
@@ -138,8 +138,7 @@ if [ ! -d "$HOME/dotfiles" ]; then
 else
     info "Updating dotfiles..."
     git --git-dir="$HOME/dotfiles" --work-tree="$HOME" fetch origin
-    git --git-dir="$HOME/dotfiles" --work-tree="$HOME" \
-        reset --hard "origin/$(git --git-dir="$HOME/dotfiles" rev-parse --abbrev-ref HEAD 2>/dev/null || echo main)"
+    git --git-dir="$HOME/dotfiles" --work-tree="$HOME" reset --hard FETCH_HEAD
 fi
 git --git-dir="$HOME/dotfiles" --work-tree="$HOME" checkout --force
 ok "Dotfiles applied"
