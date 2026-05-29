@@ -47,7 +47,7 @@ Item {
         }
         if (k === Qt.Key_Return || k === Qt.Key_Enter || k === Qt.Key_Space) {
             if (body.kbdIndex === 0) {
-                if (body.nav) body.nav.run("omarchy-capture-screenshot");
+                if (body.nav) body.nav.run("zanken-capture-screenshot");
                 body.close();
                 return true;
             }
@@ -90,7 +90,7 @@ Item {
                     label: "CAPTURE"
                     selected: body.kbdIndex === 0
                     onClicked: {
-                        if (body.nav) body.nav.run("omarchy-capture-screenshot");
+                        if (body.nav) body.nav.run("zanken-capture-screenshot");
                         body.close();
                     }
                 }

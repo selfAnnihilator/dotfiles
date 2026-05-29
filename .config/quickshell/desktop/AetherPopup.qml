@@ -19,7 +19,7 @@ CardWindow {
     theme: root
     revealed: root.aetherVisible
     cardWidth: wallhavenMode ? 580 : 460
-    layerNamespace: "omarchy-aether"
+    layerNamespace: "zanken-aether"
 
     title: "AETHER"
     subtitle: {

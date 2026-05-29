@@ -1,6 +1,6 @@
 source /usr/share/cachyos-fish-config/cachyos-config.fish
 
-set -gx OMARCHY_PATH $HOME/zanken
+set -gx ZANKEN_PATH $HOME/zanken
 # Force override bin first — fish_add_path skips already-present paths so use
 # explicit PATH manipulation to guarantee ~/.config/zanken/bin wins.
 set -gx PATH (string match -v "$HOME/.config/zanken/bin" -- $PATH)

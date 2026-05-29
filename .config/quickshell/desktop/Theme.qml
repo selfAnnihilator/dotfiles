@@ -13,7 +13,7 @@ Item {
 
     // Our own persisted round/sharp toggle. Flipped from the omni menu
     // (or any client) via the `corners` IpcHandler below. We don't read
-    // omarchy's walker.css because that file is rewritten by a buggy
+    // zanken's walker.css because that file is rewritten by a buggy
     // script and would drift out of sync with what we actually rendered.
     readonly property string cornerStatePath: Quickshell.env("HOME") + "/.local/state/quickshell-desktop/corners"
     property int cornerRadius: 0
@@ -83,7 +83,7 @@ Item {
     // startup FileView read.
     property string lastAppliedName: ""
 
-    // watchChanges: false — `omarchy theme set` does an atomic rm+mv on
+    // watchChanges: false — `zanken theme set` does an atomic rm+mv on
     // the theme dir, which would race an inotify watch. The hook tells us
     // when to reload instead.
     FileView {

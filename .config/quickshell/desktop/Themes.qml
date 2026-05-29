@@ -4,7 +4,7 @@ import Quickshell.Io
 import "Data.js" as Data
 import "Palette.js" as Palette
 
-// Theme switcher. Probes both $OMARCHY_PATH/themes (official) and
+// Theme switcher. Probes both $ZANKEN_PATH/themes (official) and
 // ~/.config/zanken/themes (user) for theme directories, parses each
 // theme's colors.toml into a swatch list, and marks the one whose
 // colors.toml is byte-identical to ~/.config/zanken/current/theme as
@@ -12,7 +12,7 @@ import "Palette.js" as Palette
 //
 // The probe runs once per mode entry (cheap on a 24-theme machine).
 // Selection drives the swatch preview through `swatches` on the
-// selected item; Enter calls `omarchy-theme-set` via the parent's
+// selected item; Enter calls `zanken-theme-set` via the parent's
 // activate() special-case.
 Item {
     id: themes
@@ -37,7 +37,7 @@ Item {
         // subdir (sort+head for deterministic pick).
         probeProc.command = ["sh", "-c",
               "cur=$(cat \"$HOME/.config/zanken/current/theme/colors.toml\" 2>/dev/null); "
-            + "for d in \"$OMARCHY_PATH/themes\"/*/ \"$HOME/.local/share/omarchy/themes\"/*/ \"$HOME/.config/zanken/themes\"/*/; do "
+            + "for d in \"$ZANKEN_PATH/themes\"/*/ \"$HOME/.local/share/zanken/themes\"/*/ \"$HOME/.config/zanken/themes\"/*/; do "
             + "  [ -d \"$d\" ] || continue; "
             + "  name=$(basename \"$d\"); "
             + "  c=$(cat \"$d/colors.toml\" 2>/dev/null); "

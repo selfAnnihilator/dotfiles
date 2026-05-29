@@ -27,7 +27,7 @@ Item {
         return false;
     }
     function _launch() {
-        if (body.nav) body.nav.run("omarchy-launch-or-focus-tui btop");
+        if (body.nav) body.nav.run("zanken-launch-or-focus-tui btop");
         body.close();
     }
 

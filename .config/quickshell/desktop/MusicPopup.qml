@@ -10,7 +10,7 @@ CardWindow {
     theme: root
     revealed: root.musicVisible
     cardWidth: 340
-    layerNamespace: "omarchy-music"
+    layerNamespace: "zanken-music"
     footer: "SPC PLAY · ← → SEEK · ESC CLOSE"
 
     anchorEdge: root.barEdge

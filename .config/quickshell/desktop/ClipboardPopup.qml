@@ -9,7 +9,7 @@ CardWindow {
     theme: root
     revealed: root.clipboardVisible
     cardWidth: 420
-    layerNamespace: "omarchy-clipboard"
+    layerNamespace: "zanken-clipboard"
     footer: "ESC CLOSE  ·  ⌫ CLEAR HISTORY"
 
     anchorEdge: root.barEdge

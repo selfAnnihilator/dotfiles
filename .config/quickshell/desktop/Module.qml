@@ -10,7 +10,7 @@ Item {
     property color color: root.ink
     property string fontFamily: root.mono
     property int fontSize: 12
-    // Optical centring. Every font here (Nerd Font, kanji serif, omarchy
+    // Optical centring. Every font here (Nerd Font, kanji serif, zanken icon
     // mark) has ascender > |descender|, so anchors.centerIn lands the
     // inked glyph below the geometric centre. A 1px lift restores it.
     // Negative = up, positive = down — override per-instance if a glyph

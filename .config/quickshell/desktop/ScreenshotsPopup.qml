@@ -7,7 +7,7 @@ CardWindow {
     theme: root
     revealed: root.screenshotsVisible
     cardWidth: 566
-    layerNamespace: "omarchy-screenshots"
+    layerNamespace: "zanken-screenshots"
     title: "SCREENSHOTS"
     subtitle: screenshotsPopup.root.screenshotFiles.length === 0
               ? "NO RECENT CAPTURES"

@@ -7,7 +7,7 @@ CardWindow {
     theme: root
     revealed: root.videosVisible
     cardWidth: 566
-    layerNamespace: "omarchy-videos"
+    layerNamespace: "zanken-videos"
     title: "VIDEOS"
     subtitle: videosPopup.root.videoFiles.length === 0
               ? "NO RECENT VIDEOS"

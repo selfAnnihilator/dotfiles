@@ -7,7 +7,7 @@ CardWindow {
     theme: root
     revealed: root.notificationsVisible
     cardWidth: 380
-    layerNamespace: "omarchy-notifications"
+    layerNamespace: "zanken-notifications"
     footer: "ESC CLOSE  ·  ⌫ CLEAR ALL"
 
     anchorEdge: root.barEdge

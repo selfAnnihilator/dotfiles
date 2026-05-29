@@ -33,7 +33,7 @@ PanelWindow {
     exclusiveZone:  bar.root.isHorizontal ? bar.root.barHeight + extraThickness : bar.root.barHeight
 
     WlrLayershell.layer: WlrLayer.Top
-    WlrLayershell.namespace: "omarchy-menu"
+    WlrLayershell.namespace: "zanken-menu"
 
     // In cloud mode the slab bg is replaced by a single rounded backdrop
     // sized to match the inner bar (barHeight tall, with cloudAir margins
@@ -297,15 +297,15 @@ PanelWindow {
             rows:    bar.root.isHorizontal ? 1  : -1
 
             Module {
-                id: omarchyModule
+                id: zankenModule
                 root: bar.root
-                glyph: bar.root.icoOmarchy
+                glyph: bar.root.icoZanken
                 tooltip: "System"
                 color: bar.root.seal
                 fontFamily: "omarchy"
                 fontSize: 14
                 onActivated: {
-                    bar.root.anchorPopupTo(omarchyModule);
+                    bar.root.anchorPopupTo(zankenModule);
                     bar.root.openSystem();
                 }
                 onRightActivated: bar.root.run("xdg-terminal-exec")

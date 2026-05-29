@@ -31,7 +31,7 @@ PanelWindow {
     property string title: ""
     property string subtitle: ""
     property string footer: ""
-    property string layerNamespace: "omarchy-card"
+    property string layerNamespace: "zanken-card"
     // Right-side header content (chevrons, refresh buttons, etc.). The
     // inline Component is instantiated as a Loader child; lexical scope
     // means ids declared in the popup file are reachable from inside.

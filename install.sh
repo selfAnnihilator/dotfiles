@@ -31,6 +31,7 @@ yay -S --needed --noconfirm \
     cava \
     swayosd \
     elephant \
+    elephant-bin \
     playerctl \
     brightnessctl \
     wireplumber \
@@ -39,9 +40,11 @@ yay -S --needed --noconfirm \
     pipewire-audio \
     xdg-desktop-portal-gnome \
     hypridle \
+    swayidle \
     swaybg \
     foot \
     fuzzel \
+    walker \
     jq \
     polkit-gnome \
     grim \
@@ -50,9 +53,21 @@ yay -S --needed --noconfirm \
     fastfetch \
     ripgrep \
     curl \
+    tmux \
+    imv \
+    mpv \
     networkmanager \
+    iwd \
     bluez \
     bluez-utils \
+    sddm \
+    mako \
+    gnome-keyring \
+    xdg-user-dirs \
+    mpd \
+    mpd-mpris \
+    gamemode \
+    ufw \
     ttf-jetbrains-mono-nerd \
     qutebrowser \
     python-adblock \
@@ -63,13 +78,52 @@ yay -S --needed --noconfirm \
     gst-plugins-ugly
 ok "Packages installed"
 
+# ── 3b. xdg user dirs ───────────────────────────────────────────
+xdg-user-dirs-update 2>/dev/null || true
+
+# ── 3c. System limits + hardening ───────────────────────────────
+info "Applying system configuration..."
+
+# Raise fd limit for niri/quickshell/dev tools
+sudo mkdir -p /etc/systemd/system.conf.d /etc/systemd/user.conf.d
+sudo tee /etc/systemd/system.conf.d/99-zanken-nofile.conf >/dev/null <<'EOF'
+[Manager]
+DefaultLimitNOFILE=65536:524288
+EOF
+sudo cp /etc/systemd/system.conf.d/99-zanken-nofile.conf \
+        /etc/systemd/user.conf.d/99-zanken-nofile.conf
+
+# Raise inotify watchers for dev tools
+sudo tee /etc/sysctl.d/90-zanken-file-watchers.conf >/dev/null <<'EOF'
+fs.inotify.max_user_watches=524288
+fs.inotify.max_user_instances=512
+EOF
+sudo sysctl --system >/dev/null 2>&1
+
+# Input group for gamepad, dictation, Xbox controllers
+sudo usermod -aG input "$USER"
+
+ok "System configuration applied"
+
+# ── 3d. Git global config ────────────────────────────────────────
+if [ -z "$(git config --global user.name 2>/dev/null)" ]; then
+    read -rp "Git name: " GIT_NAME
+    git config --global user.name "$GIT_NAME"
+fi
+if [ -z "$(git config --global user.email 2>/dev/null)" ]; then
+    read -rp "Git email: " GIT_EMAIL
+    git config --global user.email "$GIT_EMAIL"
+fi
+git config --global init.defaultBranch main 2>/dev/null || true
+
 # ── 4. Zanken scripts layer ──────────────────────────────────────
 if [ ! -d "$HOME/zanken" ]; then
     info "Cloning zanken..."
     git clone "$ZANKEN_REPO" "$HOME/zanken"
     ok "zanken ready at ~/zanken"
 else
-    warn "~/zanken already exists, skipping clone"
+    warn "~/zanken already exists, pulling latest..."
+    git -C "$HOME/zanken" pull --rebase || true
 fi
 
 # ── 5. Dotfiles bare repo ────────────────────────────────────────
@@ -96,19 +150,24 @@ if [ ! -d "$HOME/dotfiles" ]; then
     xdg-settings set default-web-browser org.qutebrowser.qutebrowser.desktop 2>/dev/null || true
 else
     warn "~/dotfiles already exists, pulling latest..."
-    git --git-dir="$HOME/dotfiles" --work-tree="$HOME" pull --rebase
+    git --git-dir="$HOME/dotfiles" --work-tree="$HOME" pull --rebase || true
+    git --git-dir="$HOME/dotfiles" --work-tree="$HOME" checkout --force || true
 fi
 
-# Fix local/share/omarchy symlink to point at zanken
-mkdir -p "$HOME/.local/share/omarchy"
-ln -sfn "$HOME/zanken" "$HOME/.local/share/omarchy/omarchy"
+# ~/.local/share/zanken → zanken repo (legacy path some tools may probe)
+mkdir -p "$HOME/.local/share/zanken"
+ln -sfn "$HOME/zanken" "$HOME/.local/share/zanken/zanken"
+
+# ~/.config/zanken/bin → ~/zanken/bin so PATH edits in zanken/bin are live immediately
+mkdir -p "$HOME/.config/zanken"
+ln -sfn "$HOME/zanken/bin" "$HOME/.config/zanken/bin"
 
 # ── 6. Default shell ─────────────────────────────────────────────
 if command -v fish &>/dev/null; then
     FISH_PATH=$(command -v fish)
     if [ "$SHELL" != "$FISH_PATH" ]; then
         info "Setting fish as default shell..."
-        chsh -s "$FISH_PATH"
+        sudo usermod -s "$FISH_PATH" "$USER"
         ok "Default shell: fish"
     fi
 fi
@@ -138,13 +197,134 @@ sudo tee /etc/sddm.conf.d/theme.conf > /dev/null <<EOF
 [Theme]
 Current=$QYLOCK_THEME
 EOF
+
+# /etc/sddm.conf wins over all conf.d — default.conf (Current=) otherwise overrides theme.conf
+sudo tee /etc/sddm.conf > /dev/null <<EOF
+[Theme]
+Current=$QYLOCK_THEME
+EOF
+
+# Suppress niri hotkey overlay on SDDM login screen
+sudo tee /etc/sddm-niri.kdl > /dev/null <<'NIREOF'
+hotkey-overlay {
+    skip-at-startup
+}
+NIREOF
+sudo tee /etc/sddm.conf.d/10-wayland.conf > /dev/null <<'WEOF'
+[General]
+DisplayServer=wayland
+
+[Wayland]
+CompositorCommand=niri --config /etc/sddm-niri.kdl
+WEOF
 ok "qylock lockscreen configured"
 
-# ── 8. Systemd user services ─────────────────────────────────────
+# ── 8. Zanken assets ─────────────────────────────────────────────
+info "Installing zanken assets..."
+
+# Font
+mkdir -p "$HOME/.local/share/fonts"
+cp "$HOME/zanken/config/omarchy.ttf" "$HOME/.local/share/fonts/"
+fc-cache -f 2>/dev/null || true
+
+# App icons (webapp icons referenced by .desktop launchers)
+mkdir -p "$HOME/.local/share/applications/icons"
+cp "$HOME/zanken/applications/icons/"* "$HOME/.local/share/applications/icons/"
+
+# Desktop file overrides (foot, imv, mpv, typora)
+cp "$HOME/zanken/applications/"*.desktop "$HOME/.local/share/applications/" 2>/dev/null || true
+
+# Initial theme — populates ~/.config/zanken/current/theme/
+export ZANKEN_PATH="$HOME/zanken"
+export PATH="$HOME/zanken/bin:$PATH"
+ZANKEN_THEME_SKIP_BACKGROUND=1 "$HOME/zanken/bin/zanken-theme-set" "tokyo-night" 2>/dev/null || true
+
+# Default mono font for quickshell bar icons (written by zanken-font-set normally)
+[ -f "$HOME/.config/zanken/current/mono-font" ] || \
+    printf 'JetBrainsMono Nerd Font' > "$HOME/.config/zanken/current/mono-font"
+
+# Btop theme symlink
+mkdir -p "$HOME/.config/btop/themes"
+ln -snf "$HOME/.config/zanken/current/theme/btop.theme" "$HOME/.config/btop/themes/current.theme"
+
+# Mako (notifications) config symlink
+mkdir -p "$HOME/.config/mako"
+ln -snf "$HOME/.config/zanken/current/theme/mako.ini" "$HOME/.config/mako/config"
+
+# Wallpapers → ~/Pictures/wallpapers/<theme>/
+# Backgrounds are not tracked in git; install.sh seeds them from zanken/themes
+info "Seeding wallpapers to ~/Pictures/wallpapers/..."
+mkdir -p "$HOME/Pictures/wallpapers"
+for theme_dir in "$HOME/zanken/themes"/*/; do
+    theme=$(basename "$theme_dir")
+    if [ -d "$theme_dir/backgrounds" ] && [ -n "$(ls -A "$theme_dir/backgrounds" 2>/dev/null)" ]; then
+        mkdir -p "$HOME/Pictures/wallpapers/$theme"
+        cp -rn "$theme_dir/backgrounds/." "$HOME/Pictures/wallpapers/$theme/" 2>/dev/null || true
+    fi
+done
+
+# ~/.config/zanken/backgrounds → ~/Pictures/wallpapers so bg picker finds them
+rm -rf "$HOME/.config/zanken/backgrounds"
+ln -sfn "$HOME/Pictures/wallpapers" "$HOME/.config/zanken/backgrounds"
+
+# Create background symlink so swaybg works on first niri launch
+if [ ! -L "$HOME/.config/zanken/current/background" ]; then
+    FIRST_BG=$(find "$HOME/Pictures/wallpapers/tokyo-night" -maxdepth 1 -type f 2>/dev/null | sort | head -1)
+    [ -n "$FIRST_BG" ] && ln -sfn "$FIRST_BG" "$HOME/.config/zanken/current/background"
+fi
+
+# Elephant menus (app launcher context menus)
+mkdir -p "$HOME/.config/elephant/menus"
+for lua in "$HOME/zanken/default/elephant/"*.lua; do
+    ln -snf "$lua" "$HOME/.config/elephant/menus/$(basename "$lua")"
+done
+
+# Mimetypes
+xdg-mime default imv.desktop image/png 2>/dev/null || true
+xdg-mime default imv.desktop image/jpeg 2>/dev/null || true
+xdg-mime default imv.desktop image/gif 2>/dev/null || true
+xdg-mime default imv.desktop image/webp 2>/dev/null || true
+xdg-mime default mpv.desktop video/mp4 2>/dev/null || true
+xdg-mime default mpv.desktop video/x-matroska 2>/dev/null || true
+xdg-mime default mpv.desktop video/webm 2>/dev/null || true
+xdg-mime default org.qutebrowser.qutebrowser.desktop x-scheme-handler/http 2>/dev/null || true
+xdg-mime default org.qutebrowser.qutebrowser.desktop x-scheme-handler/https 2>/dev/null || true
+update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
+
+# Clean stale paths from fish universal variable
+fish -c "set -e fish_user_paths; set -U fish_user_paths '$HOME/.local/bin'" 2>/dev/null || true
+
+ok "zanken assets installed"
+
+# ── 9. Systemd services ──────────────────────────────────────────
+info "Enabling system services..."
+
+# NetworkManager uses iwd as wifi backend so iwctl still works (bar uses it)
+sudo mkdir -p /etc/NetworkManager/conf.d
+sudo tee /etc/NetworkManager/conf.d/wifi_backend.conf > /dev/null <<'EOF'
+[device]
+wifi.backend=iwd
+EOF
+sudo systemctl enable --now NetworkManager iwd bluetooth 2>/dev/null || true
+sudo systemctl enable sddm 2>/dev/null || true  # starts on next boot only
+
 info "Enabling user services..."
+systemctl --user daemon-reload
 systemctl --user enable --now pipewire pipewire-pulse wireplumber 2>/dev/null || true
-sudo systemctl enable --now NetworkManager bluetooth 2>/dev/null || true
+systemctl --user enable --now swayosd-server 2>/dev/null || true
+systemctl --user enable --now swayidle 2>/dev/null || true
+systemctl --user enable --now mpd mpd-mpris 2>/dev/null || true
+systemctl --user enable --now gamemoded 2>/dev/null || true
+systemctl --user enable zanken-battery-monitor.timer 2>/dev/null || true
+systemctl --user enable zanken-recover-internal-monitor.service 2>/dev/null || true
+systemctl --user enable gnome-keyring-daemon.socket 2>/dev/null || true
 ok "Services enabled"
+
+# Restart quickshell if already running so new theme + fonts take effect
+if pgrep -x quickshell >/dev/null 2>&1; then
+    info "Restarting quickshell to apply theme..."
+    "$HOME/zanken/bin/zanken-restart-quickshell" 2>/dev/null || true
+fi
 
 echo ""
 ok "Setup complete."

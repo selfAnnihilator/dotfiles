@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 
-// Power detail panel — six native actions, no omarchy-menu indirection.
+// Power detail panel — six native actions, no zanken-menu indirection.
 // Lock uses hyprlock directly; the rest go through systemctl (login +
 // power) and Hyprland's IPC for logout. Keyboard: arrows / Tab cycle
 // the buttons, Enter activates the focused one.
@@ -17,7 +17,7 @@ Item {
 
     property int kbdIndex: 0
     readonly property var _actions: [
-        { glyph: "󰌾", label: "LOCK",      cmd: "/home/abhi/.config/zanken/bin/omarchy-system-lock" },
+        { glyph: "󰌾", label: "LOCK",      cmd: "/home/abhi/.config/zanken/bin/zanken-system-lock" },
         { glyph: "󰤄", label: "SUSPEND",   cmd: "systemctl suspend" },
         { glyph: "󰋊", label: "HIBERNATE", cmd: "systemctl hibernate" },
         { glyph: "󰗽", label: "LOGOUT",    cmd: "niri msg action quit --skip-confirmation" },

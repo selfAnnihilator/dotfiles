@@ -3,7 +3,7 @@ import Quickshell.Io
 import "Data.js" as Data
 
 // Probes a curated list of terminal-UI apps at startup and surfaces
-// only the ones actually on $PATH. Items launch via omarchy-launch-tui
+// only the ones actually on $PATH. Items launch via zanken-launch-tui
 // so they get a real terminal (most don't ship .desktop entries; the
 // ones that do are picked up by AppScan with Terminal=true respected
 // — the duplicate is fine, users star the one they prefer).
@@ -62,7 +62,7 @@ Item {
                         category: "TUI",
                         keywords: cs[i].keywords,
                         exec: cs[i].cmd,
-                        tui: "omarchy-launch-tui"
+                        tui: "zanken-launch-tui"
                     });
                 }
                 tuis.items = Data.annotate(out);

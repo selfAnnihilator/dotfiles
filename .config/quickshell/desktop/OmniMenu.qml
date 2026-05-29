@@ -7,7 +7,7 @@ import Quickshell.Io
 import "Data.js" as Data
 
 // Omni-menu palette. Fuses installed apps (.desktop scan) with every
-// `omarchy-menu` action, scored against title, category, and per-entry
+// `zanken-menu` action, scored against title, category, and per-entry
 // synonyms (so "wallpaper" finds Background, "reboot" finds Restart).
 // Drill-down rows pivot the list to a category, fd file search, gh repo
 // search, processes, or themes. Toggle via:
@@ -37,7 +37,7 @@ Item {
     readonly property color rowHi:   theme.rowHi
     readonly property color rowSel:  theme.rowSel
 
-    // Scoring weights and result cap. omarchy-menu has ~125 entries plus the
+    // Scoring weights and result cap. zanken-menu has ~125 entries plus the
     // 12 nav rows plus ~80-200 .desktop apps, so the cap lets a quick
     // page-down still reach near-matches without overdrawing.
     readonly property int scPrefix: 100
@@ -122,13 +122,13 @@ Item {
     // (battery/audio/wifi/bt) first.
     readonly property var quickTilesBase: [
         { key: "battery",     keywords: "battery power charge plugged ac percent watt",
-          action: "omarchy-menu power" },
+          action: "zanken-menu power" },
         { key: "audio",       keywords: "audio sound speaker volume mute pulse pipewire",
-          action: "omarchy-launch-audio", longAction: "pamixer -t" },
+          action: "zanken-launch-audio", longAction: "pamixer -t" },
         { key: "network",     keywords: "wifi wireless network internet ssid signal ethernet eth",
-          action: "omarchy-launch-wifi" },
+          action: "zanken-launch-wifi" },
         { key: "bluetooth",   keywords: "bluetooth bt pair device headset speaker keyboard",
-          action: "omarchy-launch-bluetooth" },
+          action: "zanken-launch-bluetooth" },
         { key: "weather",     keywords: "weather forecast temperature wttr rain sun wind",
           action: "qs -c desktop ipc call weather toggle",
           longAction: "qs -c desktop ipc call weather refresh" },
@@ -139,16 +139,16 @@ Item {
           action: "qs -c desktop ipc call aether toggle",
           longAction: "sh -c 'aether --generate \"$(aether --random-wallpaper)\"'" },
         { key: "cpu",         keywords: "cpu processor memory monitor btop top htop performance load",
-          action: "omarchy-launch-or-focus-tui btop" },
+          action: "zanken-launch-or-focus-tui btop" },
         { key: "calendar",    keywords: "calendar date month day today schedule planner",
           action: "qs -c desktop ipc call calendar toggle" },
         { key: "screenshots", keywords: "screenshots shots browse pictures captures images gallery",
           action: "qs -c desktop ipc call screenshots toggle",
-          longAction: "omarchy-capture-screenshot" },
+          longAction: "zanken-capture-screenshot" },
         { key: "videos",      keywords: "videos films clips recordings browse gallery library",
           action: "qs -c desktop ipc call videos toggle" },
         { key: "power",       keywords: "power menu suspend hibernate logout restart shutdown lock",
-          action: "omarchy-menu power" }
+          action: "zanken-menu power" }
     ]
 
     // Dynamic per-tile data — keyed by tile.key. Gated on `visible_`
@@ -400,17 +400,17 @@ Item {
     // appScan handler so they stay plain `var` assignments rather than
     // re-evaluating bindings whose dependency graph would re-allocate the
     // 200+ entry array on unrelated property touches.
-    property var omarchy: []
+    property var zanken: []
     property var nav: []
-    readonly property var allItems: root.omarchy.concat(appScan.apps).concat(navbarApps.items).concat(tuis.items).concat(themes.items).concat(lockThemes.items)
+    readonly property var allItems: root.zanken.concat(appScan.apps).concat(navbarApps.items).concat(tuis.items).concat(themes.items).concat(lockThemes.items)
 
     // ---------- Launcher ----------
-    // Matches omarchy's launch convention (see omarchy-launch-or-focus):
+    // Matches zanken's launch convention (see zanken-launch-or-focus):
     //   setsid -f          fork into a new session, returning immediately
     //                      so quickshell's Process completes; the spawned
     //                      app fully detaches from quickshell's lifetime
     //   uwsm-app -- <cmd>  registers the spawn under a systemd-user scope
-    //                      (omarchy convention; gives the app a managed
+    //                      (zanken convention; gives the app a managed
     //                      unit, proper cgroup, clean logout teardown)
     //   bash -c "<exec>"   lets exec lines with shell syntax (pipes,
     //                      ||, &&, redirects) work alongside plain
@@ -431,11 +431,11 @@ Item {
         }
         // Keybind reference — read-only, just close.
         if (item.isKeybind) { root.close(); return; }
-        // Theme apply — fire and forget; omarchy-theme-set rebuilds
+        // Theme apply — fire and forget; zanken-theme-set rebuilds
         // configs and reloads all the live apps that listen for it.
         if (item.isTheme) {
             runner.command = ["sh", "-c",
-                "setsid -f omarchy-theme-set \"$1\" >/dev/null 2>&1",
+                "setsid -f zanken-theme-set \"$1\" >/dev/null 2>&1",
                 "sh", item.themeName];
             runner.running = false;
             runner.running = true;
@@ -444,7 +444,7 @@ Item {
         }
         if (item.isLockTheme) {
             runner.command = ["sh", "-c",
-                "setsid -f omarchy-qylock-theme-set \"$1\" >/dev/null 2>&1",
+                "setsid -f zanken-qylock-theme-set \"$1\" >/dev/null 2>&1",
                 "sh", item.themeName];
             runner.running = false;
             runner.running = true;
@@ -454,7 +454,7 @@ Item {
         bookmarks.record(item);
         // TUI commands need a real terminal — fzf, sudo prompts, and bash
         // `read` fail when launched detached. `item.tui` holds the wrapper
-        // command name (omarchy-launch-tui or omarchy-launch-floating-…).
+        // command name (zanken-launch-tui or zanken-launch-floating-…).
         const cmd = item.tui ? item.tui + " " + item.exec : item.exec;
         runner.command = ["sh", "-c",
                           "setsid -f bash -c "
@@ -525,7 +525,7 @@ Item {
         else                     pool = root.navRows;
 
         // Empty query: preserve insertion order (nav rows first, then
-        // omarchy actions, then apps). No scoring, no allocation overhead.
+        // zanken actions, then apps). No scoring, no allocation overhead.
         if (tokens.length === 0) {
             return pool.length <= cap ? pool : pool.slice(0, cap);
         }
@@ -581,7 +581,7 @@ Item {
     }
 
     Component.onCompleted: {
-        root.omarchy = Data.annotate(Data.omarchyItems);
+        root.zanken = Data.annotate(Data.zankenItems);
         root.nav     = Data.annotate(Data.categoryNav);
     }
 
@@ -1792,7 +1792,7 @@ Item {
                             if (!it) return "";
                             if (it.isCategory)  return "→ open " + it.target.toLowerCase();
                             if (it.isProcess)   return "↵ kill " + (it.pid || "");
-                            if (it.isTheme)     return "↵ omarchy-theme-set " + (it.themeName || "");
+                            if (it.isTheme)     return "↵ zanken-theme-set " + (it.themeName || "");
                             if (it.isLockTheme) return "↵ qylock-theme-set " + (it.themeName || "");
                             if (it.isKeybind)   return "󰌌 " + it.title;
                             return "$ " + it.exec;

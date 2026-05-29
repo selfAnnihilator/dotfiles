@@ -14,7 +14,7 @@ PanelWindow {
     anchors { top: true; bottom: true; left: true; right: true }
     exclusionMode: ExclusionMode.Ignore
     WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.namespace: "omarchy-tooltip"
+    WlrLayershell.namespace: "zanken-tooltip"
     mask: Region {}
 
     // Keep alive briefly so the fade-out can play before the window is

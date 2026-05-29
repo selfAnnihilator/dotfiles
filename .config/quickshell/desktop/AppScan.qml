@@ -90,7 +90,7 @@ Item {
                         // Terminal=true in the .desktop entry — apps like
                         // cliamp need a TTY to render; without one they
                         // exit immediately when launched detached.
-                        tui: p[7] === "1" ? "omarchy-launch-tui" : ""
+                        tui: p[7] === "1" ? "zanken-launch-tui" : ""
                     };
                 }
                 apps.length = n;

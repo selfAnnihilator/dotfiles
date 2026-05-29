@@ -7,7 +7,7 @@ CardWindow {
     theme: root
     revealed: root.weatherVisible
     cardWidth: 360
-    layerNamespace: "omarchy-weather"
+    layerNamespace: "zanken-weather"
     footer: "CLICK PLACE TO EDIT · R REFRESH · ESC"
 
     anchorEdge: weatherPopup.root.barEdge

@@ -4,7 +4,7 @@ import Quickshell
 
 // Combined entry point: one Quickshell process hosting both the navbar and
 // the omni-menu command palette. Both share the same Theme instance, so an
-// omarchy theme swap propagates atomically to bar + popups + palette.
+// zanken theme swap propagates atomically to bar + popups + palette.
 //
 // Launch with:
 //   qs -n -d -c desktop

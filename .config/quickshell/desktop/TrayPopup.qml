@@ -20,7 +20,7 @@ PanelWindow {
     anchors { top: true; bottom: true; left: true; right: true }
     exclusionMode: ExclusionMode.Ignore
     WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.namespace: "omarchy-tray"
+    WlrLayershell.namespace: "zanken-tray"
     WlrLayershell.keyboardFocus: root.trayVisible ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
     WlrLayershell.margins.top:    root.barEdge === "top"    ? root.barHeight : 0
     WlrLayershell.margins.bottom: root.barEdge === "bottom" ? root.barHeight : 0

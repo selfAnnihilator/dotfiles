@@ -10,7 +10,7 @@ PanelWindow {
     anchors { top: true; bottom: true; left: true; right: true }
     exclusionMode: ExclusionMode.Ignore
     WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.namespace: "omarchy-power"
+    WlrLayershell.namespace: "zanken-power"
     WlrLayershell.keyboardFocus: root.powerVisible ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
 
     visible: root.powerVisible || _reveal > 0.001
@@ -28,9 +28,9 @@ PanelWindow {
     readonly property var actions: [
         { glyph: "󰐥", label: "SHUTDOWN", cmd: "systemctl poweroff" },
         { glyph: "󰜉", label: "REBOOT",   cmd: "systemctl reboot"  },
-        { glyph: "󰗽", label: "LOGOUT",   cmd: "omarchy-system-logout" },
+        { glyph: "󰗽", label: "LOGOUT",   cmd: "zanken-system-logout" },
         { glyph: "󰤄", label: "SUSPEND",  cmd: "systemctl suspend" },
-        { glyph: "󰌾", label: "LOCK",     cmd: "omarchy-system-lock" },
+        { glyph: "󰌾", label: "LOCK",     cmd: "zanken-system-lock" },
     ]
 
     function _fire(a) {

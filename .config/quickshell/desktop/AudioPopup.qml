@@ -7,7 +7,7 @@ CardWindow {
     theme: root
     revealed: root.audioVisible
     cardWidth: 400
-    layerNamespace: "omarchy-audio"
+    layerNamespace: "zanken-audio"
     footer: "M MUTE · TAB SWITCH · ESC CLOSE"
 
     anchorEdge: root.barEdge

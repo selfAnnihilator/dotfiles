@@ -3,7 +3,7 @@ import QtQuick
 // Aether detail with three modes:
 //   BLUEPRINTS — saved aether palettes (apply on Enter)
 //   WALLHAVEN  — top wallpapers from wallhaven.cc with material toggle
-//   THEMES     — omarchy themes with swatch strips
+//   THEMES     — zanken themes with swatch strips
 // Tab cycles modes; ↑/↓/Tab move through the visible content; Enter
 // applies the focused item. ESC collapses (handled by OmniMenu).
 Item {
@@ -149,7 +149,7 @@ Item {
             if (ci < body._themes.length) {
                 const t = body._themes[ci];
                 if (t && body.nav) {
-                    body.nav.run("sh -c 'setsid -f omarchy-theme-set \"$1\" >/dev/null 2>&1' sh "
+                    body.nav.run("sh -c 'setsid -f zanken-theme-set \"$1\" >/dev/null 2>&1' sh "
                                  + JSON.stringify(t.themeName));
                 }
                 body.close();

@@ -7,7 +7,7 @@ CardWindow {
     theme: root
     revealed: root.bluetoothVisible
     cardWidth: 400
-    layerNamespace: "omarchy-bluetooth"
+    layerNamespace: "zanken-bluetooth"
     footer: "CLICK CONNECT · T TOGGLE · S SCAN · ESC"
 
     anchorEdge: btPopup.root.barEdge

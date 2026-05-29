@@ -7,7 +7,7 @@ CardWindow {
     theme: root
     revealed: root.wifiVisible
     cardWidth: 400
-    layerNamespace: "omarchy-wifi"
+    layerNamespace: "zanken-wifi"
     footer: ""
 
     anchorEdge: wifiPopup.root.barEdge

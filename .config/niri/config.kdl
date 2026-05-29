@@ -1,4 +1,4 @@
-// Omarchy-for-niri configuration
+// Zanken-for-niri configuration
 // KDL format: https://kdl.dev
 
 input {
@@ -19,7 +19,7 @@ input {
 
 }
 
-// Spawn omarchy daemons at startup
+// Spawn zanken daemons at startup
 spawn-at-startup "hypridle"
 spawn-at-startup "swayosd-server"
 spawn-at-startup "qs" "-n" "-d" "-c" "desktop"
@@ -28,7 +28,7 @@ spawn-at-startup "swaybg" "-i" "/home/abhi/.config/zanken/current/background" "-
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-sh-at-startup "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
 spawn-sh-at-startup "dbus-update-activation-environment --systemd --all"
-spawn-sh-at-startup "sleep 2 && omarchy-hook post-boot"
+spawn-sh-at-startup "sleep 2 && zanken-hook post-boot"
 
 hotkey-overlay {
     skip-at-startup
@@ -121,7 +121,7 @@ window-rule {
 }
 
 window-rule {
-    match app-id="org.omarchy.screensaver"
+    match app-id="org.zanken.screensaver"
     open-fullscreen true
 }
 
@@ -135,11 +135,11 @@ binds {
     Mod+Alt+Return { spawn "foot" "-e" "tmux" "new-session" "-A" "-s" "main"; }
 
     // Browser / file manager / editor
-    Mod+Shift+Return { spawn "omarchy-launch-browser"; }
+    Mod+Shift+Return { spawn "zanken-launch-browser"; }
     Mod+B { spawn "qutebrowser"; }
     Mod+Shift+B { spawn "firefox"; }
     Mod+E { spawn "nautilus"; }
-    Mod+Shift+N { spawn "omarchy-launch-editor"; }
+    Mod+Shift+N { spawn "zanken-launch-editor"; }
 
     // App launcher
     Mod+Space { spawn "qs" "-c" "desktop" "ipc" "call" "palette" "openCategory" "App"; }
@@ -151,17 +151,17 @@ binds {
 
 
     // Lock screen
-    Mod+Ctrl+L { spawn "/home/abhi/.config/zanken/bin/omarchy-system-lock"; }
-    Mod+Alt+L { spawn "/home/abhi/.config/zanken/bin/omarchy-system-lock"; }
+    Mod+Ctrl+L { spawn "/home/abhi/.config/zanken/bin/zanken-system-lock"; }
+    Mod+Alt+L { spawn "/home/abhi/.config/zanken/bin/zanken-system-lock"; }
 
     // Idle / nightlight toggles
-    Mod+Ctrl+I { spawn "omarchy-toggle-idle"; }
-    Mod+Ctrl+N { spawn "omarchy-toggle-nightlight"; }
+    Mod+Ctrl+I { spawn "zanken-toggle-idle"; }
+    Mod+Ctrl+N { spawn "zanken-toggle-nightlight"; }
 
     // Audio / bluetooth / wifi TUIs
-    Mod+Ctrl+A { spawn "omarchy-launch-audio"; }
-    Mod+Ctrl+B { spawn "omarchy-launch-bluetooth"; }
-    Mod+Ctrl+W { spawn "omarchy-launch-wifi"; }
+    Mod+Ctrl+A { spawn "zanken-launch-audio"; }
+    Mod+Ctrl+B { spawn "zanken-launch-bluetooth"; }
+    Mod+Ctrl+W { spawn "zanken-launch-wifi"; }
 
     // Key binding help (Mod+K conflicts with focus-up; use Alt)
     Mod+Alt+K { spawn "qs" "-c" "desktop" "ipc" "call" "palette" "openCategory" "Keybinds"; }
@@ -173,8 +173,8 @@ binds {
     XF86Calculator { spawn "gnome-calculator"; }
 
     // Reminders (Ctrl+R conflicts with reset-height; use Alt)
-    Mod+Alt+R { spawn "omarchy-launch-tui" "omarchy-reminder-set"; }
-    Mod+Ctrl+Alt+R { spawn "omarchy-reminder" "show"; }
+    Mod+Alt+R { spawn "zanken-launch-tui" "zanken-reminder-set"; }
+    Mod+Ctrl+Alt+R { spawn "zanken-reminder" "show"; }
 
     // Color picker
     Mod+Print { spawn "hyprpicker" "-a"; }
@@ -300,46 +300,46 @@ binds {
     Mod+BracketLeft  { consume-or-expel-window-left; }
     Mod+BracketRight { consume-or-expel-window-right; }
 
-    // Screenshots (using omarchy scripts: grim + slurp, works on niri)
-    Print { spawn "omarchy-capture-screenshot"; }
-    Ctrl+Print { spawn "omarchy-capture-screenshot" "fullscreen"; }
-    Shift+Print { spawn "omarchy-capture-screenshot" "region"; }
-    Mod+Ctrl+Print { spawn "omarchy-capture-text-extraction"; }
+    // Screenshots (using zanken scripts: grim + slurp, works on niri)
+    Print { spawn "zanken-capture-screenshot"; }
+    Ctrl+Print { spawn "zanken-capture-screenshot" "fullscreen"; }
+    Shift+Print { spawn "zanken-capture-screenshot" "region"; }
+    Mod+Ctrl+Print { spawn "zanken-capture-text-extraction"; }
 
-    // Volume (via omarchy-swayosd-client)
-    XF86AudioRaiseVolume allow-when-locked=true { spawn "omarchy-swayosd-client" "--output-volume" "raise"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn "omarchy-swayosd-client" "--output-volume" "lower"; }
-    XF86AudioMute        allow-when-locked=true { spawn "omarchy-swayosd-client" "--output-volume" "mute-toggle"; }
-    XF86AudioMicMute     allow-when-locked=true { spawn "omarchy-audio-input-mute"; }
+    // Volume (via zanken-swayosd-client)
+    XF86AudioRaiseVolume allow-when-locked=true { spawn "zanken-swayosd-client" "--output-volume" "raise"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "zanken-swayosd-client" "--output-volume" "lower"; }
+    XF86AudioMute        allow-when-locked=true { spawn "zanken-swayosd-client" "--output-volume" "mute-toggle"; }
+    XF86AudioMicMute     allow-when-locked=true { spawn "zanken-audio-input-mute"; }
 
-    // Brightness (via omarchy scripts)
-    XF86MonBrightnessUp   allow-when-locked=true { spawn "omarchy-brightness-display" "+5%"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn "omarchy-brightness-display" "5%-"; }
-    Shift+XF86MonBrightnessUp   allow-when-locked=true { spawn "omarchy-brightness-display" "100%"; }
-    Shift+XF86MonBrightnessDown allow-when-locked=true { spawn "omarchy-brightness-display" "1%"; }
+    // Brightness (via zanken scripts)
+    XF86MonBrightnessUp   allow-when-locked=true { spawn "zanken-brightness-display" "+5%"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "zanken-brightness-display" "5%-"; }
+    Shift+XF86MonBrightnessUp   allow-when-locked=true { spawn "zanken-brightness-display" "100%"; }
+    Shift+XF86MonBrightnessDown allow-when-locked=true { spawn "zanken-brightness-display" "1%"; }
 
     // Keyboard backlight
-    XF86KbdBrightnessUp   allow-when-locked=true { spawn "omarchy-brightness-keyboard" "up"; }
-    XF86KbdBrightnessDown allow-when-locked=true { spawn "omarchy-brightness-keyboard" "down"; }
-    XF86KbdLightOnOff     allow-when-locked=true { spawn "omarchy-brightness-keyboard" "cycle"; }
+    XF86KbdBrightnessUp   allow-when-locked=true { spawn "zanken-brightness-keyboard" "up"; }
+    XF86KbdBrightnessDown allow-when-locked=true { spawn "zanken-brightness-keyboard" "down"; }
+    XF86KbdLightOnOff     allow-when-locked=true { spawn "zanken-brightness-keyboard" "cycle"; }
 
     // Touchpad toggle
-    XF86TouchpadToggle allow-when-locked=true { spawn "omarchy-toggle-touchpad"; }
-    XF86TouchpadOn     allow-when-locked=true { spawn "omarchy-toggle-touchpad" "on"; }
-    XF86TouchpadOff    allow-when-locked=true { spawn "omarchy-toggle-touchpad" "off"; }
+    XF86TouchpadToggle allow-when-locked=true { spawn "zanken-toggle-touchpad"; }
+    XF86TouchpadOn     allow-when-locked=true { spawn "zanken-toggle-touchpad" "on"; }
+    XF86TouchpadOff    allow-when-locked=true { spawn "zanken-toggle-touchpad" "off"; }
 
     // Precise volume/brightness (+1 step)
-    Alt+XF86AudioRaiseVolume allow-when-locked=true { spawn "omarchy-swayosd-client" "--output-volume" "+1"; }
-    Alt+XF86AudioLowerVolume allow-when-locked=true { spawn "omarchy-swayosd-client" "--output-volume" "-1"; }
-    Alt+XF86MonBrightnessUp   allow-when-locked=true { spawn "omarchy-brightness-display" "+1%"; }
-    Alt+XF86MonBrightnessDown allow-when-locked=true { spawn "omarchy-brightness-display" "1%-"; }
+    Alt+XF86AudioRaiseVolume allow-when-locked=true { spawn "zanken-swayosd-client" "--output-volume" "+1"; }
+    Alt+XF86AudioLowerVolume allow-when-locked=true { spawn "zanken-swayosd-client" "--output-volume" "-1"; }
+    Alt+XF86MonBrightnessUp   allow-when-locked=true { spawn "zanken-brightness-display" "+1%"; }
+    Alt+XF86MonBrightnessDown allow-when-locked=true { spawn "zanken-brightness-display" "1%-"; }
 
-    // Media controls (via omarchy-swayosd-client)
-    XF86AudioPlay allow-when-locked=true { spawn "omarchy-swayosd-client" "--playerctl" "play-pause"; }
-    XF86AudioPause allow-when-locked=true { spawn "omarchy-swayosd-client" "--playerctl" "play-pause"; }
-    XF86AudioNext allow-when-locked=true { spawn "omarchy-swayosd-client" "--playerctl" "next"; }
-    XF86AudioPrev allow-when-locked=true { spawn "omarchy-swayosd-client" "--playerctl" "previous"; }
-    Mod+XF86AudioMute allow-when-locked=true { spawn "omarchy-audio-output-switch"; }
+    // Media controls (via zanken-swayosd-client)
+    XF86AudioPlay allow-when-locked=true { spawn "zanken-swayosd-client" "--playerctl" "play-pause"; }
+    XF86AudioPause allow-when-locked=true { spawn "zanken-swayosd-client" "--playerctl" "play-pause"; }
+    XF86AudioNext allow-when-locked=true { spawn "zanken-swayosd-client" "--playerctl" "next"; }
+    XF86AudioPrev allow-when-locked=true { spawn "zanken-swayosd-client" "--playerctl" "previous"; }
+    Mod+XF86AudioMute allow-when-locked=true { spawn "zanken-audio-output-switch"; }
 
     // Notifications
     Mod+Comma      { spawn "qs" "-c" "desktop" "ipc" "call" "notifications" "dismiss"; }
@@ -350,18 +350,18 @@ binds {
     Mod+Shift+Period { spawn "qs" "-c" "desktop" "ipc" "call" "notifications" "toggleDnd"; }
 
     // Waybar toggle
-    Mod+Shift+Space { spawn "/home/abhi/.config/zanken/bin/omarchy-restart-quickshell"; }
+    Mod+Shift+Space { spawn "/home/abhi/.config/zanken/bin/zanken-restart-quickshell"; }
 
     // Background picker
-    Mod+Ctrl+Space { spawn "omarchy-theme-bg-switcher"; }
+    Mod+Ctrl+Space { spawn "zanken-theme-bg-switcher"; }
 
     // Theme switcher → OmniMenu Themes drill-down
     Mod+Shift+Ctrl+Space { spawn "qs" "-c" "desktop" "ipc" "call" "palette" "openCategory" "Themes"; }
 
     // System info shortcuts
-    Mod+Ctrl+Alt+T { spawn "omarchy-notification-time"; }
-    Mod+Ctrl+Alt+B { spawn "omarchy-notification-battery"; }
-    Mod+Ctrl+Alt+W { spawn "omarchy-notification-weather"; }
+    Mod+Ctrl+Alt+T { spawn "zanken-notification-time"; }
+    Mod+Ctrl+Alt+B { spawn "zanken-notification-battery"; }
+    Mod+Ctrl+Alt+W { spawn "zanken-notification-weather"; }
 
     // Btop activity monitor
     Mod+Ctrl+T { spawn "foot" "-e" "btop"; }

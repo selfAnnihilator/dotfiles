@@ -7,7 +7,7 @@ CardWindow {
     theme: root
     revealed: root.calendarVisible
     cardWidth: 322
-    layerNamespace: "omarchy-calendar"
+    layerNamespace: "zanken-calendar"
     title: calendarPopup.root.calendarMonthName
     subtitle: calendarPopup.root.calendarYear
 

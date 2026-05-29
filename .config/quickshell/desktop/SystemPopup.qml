@@ -9,7 +9,7 @@ CardWindow {
     theme: root
     revealed: root.systemVisible
     cardWidth: 320
-    layerNamespace: "omarchy-system"
+    layerNamespace: "zanken-system"
     footer: "ESC CLOSE"
     title: "󰋊  SYSTEM"
 

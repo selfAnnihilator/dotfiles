@@ -7,7 +7,7 @@ import Quickshell.Services.Mpris
 import Quickshell.Services.Notifications
 import Quickshell.Services.SystemTray
 
-// Omarchy top bar. Owns the per-bar state, probes, and IPC; per-feature
+// Zanken top bar. Owns the per-bar state, probes, and IPC; per-feature
 // surfaces (Bar, *Popup, TooltipOverlay) and widgets (Module, Workspace,
 // Bloom, …) read from `root` via `root: root` injection. Palette comes
 // from the shared Theme; colours are re-exposed on root so sibling files
@@ -47,7 +47,7 @@ Item {
 
     // BMP Private Use Area icons; written via fromCodePoint so the source
     // stays ASCII-safe.
-    readonly property string icoOmarchy: String.fromCodePoint(0xe900)
+    readonly property string icoZanken: String.fromCodePoint(0xe900)
     readonly property string icoBtOn:    String.fromCodePoint(0xf294)
     readonly property string icoVol1:    String.fromCodePoint(0xf026)
     readonly property string icoVol2:    String.fromCodePoint(0xf027)
@@ -330,7 +330,7 @@ Item {
     property string wifiConnectingSSID: ""
     property string wifiConnectError: ""
 
-    // iwd-based: omarchy uses iwctl, not nmcli. The probe detects the
+    // iwd-based: zanken uses iwctl, not nmcli. The probe detects the
     // first station-mode device dynamically so multi-radio laptops work.
     function refreshWifi() {
         if (wifiScanProbe.running) return;
@@ -424,7 +424,7 @@ Item {
         btDevicesProbe.running = false;
         btDevicesProbe.running = true;
     }
-    // bluez-tools path (omarchy ships bt-adapter / bt-device, not the
+    // bluez-tools path (zanken ships bt-adapter / bt-device, not the
     // bluetoothctl utility). Same semantics as before, different CLI.
     function btConnect(mac) {
         if (!mac) return;
@@ -550,19 +550,19 @@ Item {
         onTriggered: root.refreshPowerProfile()
     }
 
-    // omarchy-update-available exits 0 when the local omarchy clone is
+    // zanken-update-available exits 0 when the local zanken clone is
     // behind the latest tag. The bar surfaces a small refresh glyph next
     // to the battery for as long as that's the case; click → launch the
     // floating update terminal.
-    property bool   omarchyUpdateAvailable: false
-    property string omarchyLatestTag: ""
+    property bool   zankenUpdateAvailable: false
+    property string zankenLatestTag: ""
 
     function openOmarchyUpdate() {
-        root.run("omarchy-launch-floating-terminal-with-presentation omarchy-update");
+        root.run("zanken-launch-floating-terminal-with-presentation zanken-update");
     }
     function refreshOmarchyUpdateCheck() {
-        omarchyUpdateProbe.running = false;
-        omarchyUpdateProbe.running = true;
+        zankenUpdateProbe.running = false;
+        zankenUpdateProbe.running = true;
     }
 
     property string hh: "--"
@@ -1059,7 +1059,7 @@ Item {
     property var    weatherForecast: []
     property string weatherUpdatedAt: ""
 
-    // Mirrors omarchy-weather-icon's case statement so the bar glyph stays
+    // Mirrors zanken-weather-icon's case statement so the bar glyph stays
     // honest when a manual location overrides IP geolocation. `night`
     // swaps the variants for codes that have one.
     function weatherGlyph(code, night) {
@@ -1179,7 +1179,7 @@ Item {
     function editWeatherLocation() {
         root.run("mkdir -p \"$(dirname " + JSON.stringify(root.weatherLocationPath) + ")\""
                  + " && touch " + JSON.stringify(root.weatherLocationPath)
-                 + " && omarchy-launch-editor " + JSON.stringify(root.weatherLocationPath));
+                 + " && zanken-launch-editor " + JSON.stringify(root.weatherLocationPath));
         root.weatherVisible = false;
     }
 
@@ -1611,7 +1611,7 @@ Item {
     // Live timer disabled — user controls refresh via the button in the popup.
 
     // ---------- Wi-Fi scan probe ----------
-    // iwctl path (omarchy ships iwd, not NetworkManager): detect the
+    // iwctl path (zanken ships iwd, not NetworkManager): detect the
     // station device, check Powered state, kick a non-blocking scan,
     // then parse human-formatted get-networks output. Signal is reported
     // in tenths of dBm (e.g. -6400 = -64 dBm); convert to a 0-100% bar
@@ -1998,23 +1998,23 @@ Item {
     }
 
     // ---------- Omarchy update probe ----------
-    // Mirrors waybar's custom/update: omarchy-update-available exits 0 and
+    // Mirrors waybar's custom/update: zanken-update-available exits 0 and
     // prints "Omarchy update available (<tag>)" when behind, exits non-zero
     // otherwise. Network-bound (ls-remote), so the cadence matches waybar
     // at 6h; refreshOmarchyUpdateCheck() retriggers on demand.
     Process {
-        id: omarchyUpdateProbe
+        id: zankenUpdateProbe
         running: false
-        command: ["omarchy-update-available"]
-        stdout: StdioCollector { id: omarchyUpdateOut }
+        command: ["zanken-update-available"]
+        stdout: StdioCollector { id: zankenUpdateOut }
         onExited: (code, status) => {
             if (code === 0) {
-                const m = omarchyUpdateOut.text.match(/\(([^)]+)\)/);
-                root.omarchyLatestTag = m ? m[1] : "";
-                root.omarchyUpdateAvailable = true;
+                const m = zankenUpdateOut.text.match(/\(([^)]+)\)/);
+                root.zankenLatestTag = m ? m[1] : "";
+                root.zankenUpdateAvailable = true;
             } else {
-                root.omarchyUpdateAvailable = false;
-                root.omarchyLatestTag = "";
+                root.zankenUpdateAvailable = false;
+                root.zankenLatestTag = "";
             }
         }
     }

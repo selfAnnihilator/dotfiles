@@ -7,7 +7,7 @@ CardWindow {
     theme: root
     revealed: root.displayVisible
     cardWidth: 480
-    layerNamespace: "omarchy-display"
+    layerNamespace: "zanken-display"
     footer: "↑↓ ROW · ←→ ADJUST · 1-4 PRESET · R RESET · B BLANK · E EDIT · ESC"
 
     anchorEdge: displayPopup.root.barEdge
@@ -56,7 +56,7 @@ CardWindow {
             if (r.displayRow === 3) {
                 r.applyPreset(r.displayPresets[r.selectedPreset]);
             } else if (r.displayRow === 4) {
-                r.run("omarchy-launch-editor ~/.config/hypr/monitors.lua");
+                r.run("zanken-launch-editor ~/.config/hypr/monitors.lua");
                 r.displayVisible = false;
             } else if (r.displayRow === 5) r.blankScreen();
             else if (r.displayRow === 6) r.resetDisplay();
@@ -71,7 +71,7 @@ CardWindow {
         } else if (k === Qt.Key_B) {
             r.blankScreen();
         } else if (k === Qt.Key_E) {
-            r.run("omarchy-launch-editor ~/.config/hypr/monitors.lua");
+            r.run("zanken-launch-editor ~/.config/hypr/monitors.lua");
             r.displayVisible = false;
         } else {
             return;
@@ -176,7 +176,7 @@ CardWindow {
                 selected: displayPopup.root.displayRow === 4
                 onActivated: {
                     displayPopup.root.displayRow = 4;
-                    displayPopup.root.run("omarchy-launch-editor ~/.config/hypr/monitors.lua");
+                    displayPopup.root.run("zanken-launch-editor ~/.config/hypr/monitors.lua");
                     displayPopup.root.displayVisible = false;
                 }
             }

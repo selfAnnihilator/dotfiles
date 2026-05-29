@@ -4,7 +4,7 @@ import Quickshell.Io
 
 // Lists qylock themes from ~/.local/share/qylock/themes/.
 // Marks the current theme (from ~/.config/qylock/theme) as active.
-// Selection drives omarchy-qylock-theme-set via parent activate().
+// Selection drives zanken-qylock-theme-set via parent activate().
 Item {
     id: lockThemes
 
@@ -20,14 +20,24 @@ Item {
     }
 
     function refresh() {
-        probeProc.command = ["sh", "-c",
-              "THEMES_DIR=\"$HOME/.local/share/qylock/themes\"; "
-            + "CUR=$(cat \"$HOME/.config/qylock/theme\" 2>/dev/null | tr -d '[:space:]'); "
-            + "for d in \"$THEMES_DIR\"/*/; do "
+        probeProc.command = ["bash", "-c",
+              "T=\"$HOME/.local/share/qylock/themes\"; "
+            + "C=$(cat \"$HOME/.config/qylock/theme\" 2>/dev/null | tr -d '[:space:]'); "
+            + "for d in \"$T\"/*/; do "
             + "  [ -d \"$d\" ] || continue; "
-            + "  name=$(basename \"$d\"); "
-            + "  marker=' '; [ \"$name\" = \"$CUR\" ] && marker='*'; "
-            + "  printf '===%s\\t%s\\n' \"$name\" \"$marker\"; "
+            + "  n=$(basename \"$d\"); "
+            + "  if [ -f \"$d/Main.qml\" ]; then "
+            + "    m=' '; [ \"$n\" = \"$C\" ] && m='*'; "
+            + "    printf '===%s\\t%s\\n' \"$n\" \"$m\"; "
+            + "  else "
+            + "    for s in \"$d\"*/; do "
+            + "      [ -d \"$s\" ] || continue; "
+            + "      [ -f \"$s/Main.qml\" ] || continue; "
+            + "      sn=\"$n/$(basename $s)\"; "
+            + "      m=' '; [ \"$sn\" = \"$C\" ] && m='*'; "
+            + "      printf '===%s\\t%s\\n' \"$sn\" \"$m\"; "
+            + "    done; "
+            + "  fi; "
             + "done"];
         probeProc.running = false;
         probeProc.running = true;

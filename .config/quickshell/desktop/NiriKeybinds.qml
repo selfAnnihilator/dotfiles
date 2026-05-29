@@ -18,7 +18,7 @@ Item {
 
     function refresh() {
         const cfg = Quickshell.env("HOME") + "/.config/niri/config.kdl";
-        parseProc.command = ["omarchy-niri-keybindings", "--print-tsv", cfg];
+        parseProc.command = ["zanken-niri-keybindings", "--print-tsv", cfg];
         parseProc.running = false;
         parseProc.running = true;
     }

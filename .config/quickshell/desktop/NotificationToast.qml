@@ -14,7 +14,7 @@ PanelWindow {
     }
 
     WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.namespace: "omarchy-toast"
+    WlrLayershell.namespace: "zanken-toast"
     WlrLayershell.margins {
         top:    root.barEdge === "top"    ? root.barHeight + 8 : 8
         right:  root.barEdge === "right"  ? root.barHeight + 8 : 8

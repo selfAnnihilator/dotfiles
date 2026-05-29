@@ -7,7 +7,7 @@ CardWindow {
     theme: root
     revealed: root.batteryVisible
     cardWidth: 300
-    layerNamespace: "omarchy-battery"
+    layerNamespace: "zanken-battery"
     footer: "← → PROFILE · ESC CLOSE"
 
     anchorEdge: root.barEdge
