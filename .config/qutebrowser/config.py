@@ -171,11 +171,11 @@ config.set('content.javascript.enabled', True, 'qute://*/*')
 
 # Allow locally loaded documents to access remote URLs.
 # Type: Bool
-config.set('content.local_content_can_access_remote_urls', True, 'file:///home/abhi/.local/share/qutebrowser/userscripts/*')
+config.set('content.local_content_can_access_remote_urls', True, 'file://' + os.path.expanduser('~/.local/share/qutebrowser/userscripts/*'))
 
 # Allow locally loaded documents to access other local URLs.
 # Type: Bool
-config.set('content.local_content_can_access_file_urls', False, 'file:///home/abhi/.local/share/qutebrowser/userscripts/*')
+config.set('content.local_content_can_access_file_urls', False, 'file://' + os.path.expanduser('~/.local/share/qutebrowser/userscripts/*'))
 
 # Allow websites to show notifications.
 # Type: BoolAsk
@@ -222,7 +222,7 @@ config.set('content.notifications.enabled', True, 'https://www.youtube.com')
 c.downloads.location.directory = '~/Downloads'
 
 #Startup Page
-startpage = "file:///home/abhi/.config/qutebrowser/startPage/startup.html"
+startpage = "file://" + os.path.expanduser("~/.config/qutebrowser/startPage/startup.html")
 c.url.start_pages = [startpage]
 c.url.default_page = startpage
 

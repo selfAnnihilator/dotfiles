@@ -47,7 +47,15 @@ yay -S --needed --noconfirm \
     grim \
     slurp \
     wl-clipboard \
-    fastfetch
+    fastfetch \
+    ripgrep \
+    curl \
+    networkmanager \
+    bluez \
+    bluez-utils \
+    ttf-jetbrains-mono-nerd \
+    qutebrowser \
+    python-adblock
 ok "Packages installed"
 
 # ── 4. Zanken scripts layer ──────────────────────────────────────
@@ -78,6 +86,9 @@ if [ ! -d "$HOME/dotfiles" ]; then
 
     git --git-dir="$HOME/dotfiles" --work-tree="$HOME" checkout --force
     ok "Dotfiles checked out"
+
+    # Set qutebrowser as default browser once dotfiles are in place
+    xdg-settings set default-web-browser org.qutebrowser.qutebrowser.desktop 2>/dev/null || true
 else
     warn "~/dotfiles already exists, pulling latest..."
     git --git-dir="$HOME/dotfiles" --work-tree="$HOME" pull --rebase
@@ -100,6 +111,7 @@ fi
 # ── 7. Systemd user services ─────────────────────────────────────
 info "Enabling user services..."
 systemctl --user enable --now pipewire pipewire-pulse wireplumber 2>/dev/null || true
+sudo systemctl enable --now NetworkManager bluetooth 2>/dev/null || true
 ok "Services enabled"
 
 echo ""

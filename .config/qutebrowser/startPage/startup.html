@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Start</title>
+  <link rel="stylesheet" href="colors.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">  
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+
+    <p id="greeting"></p>
+
+    <h1 id="clock">00:00</h1>
+
+    <p id="date"></p>
+
+    <div class="links">
+
+      <div class="column">
+        <h2>general</h2>
+        <a href="https://github.com">github</a>
+        <a href="https://learn.omacom.io/2/the-omarchy-manual">omarchy</a>
+        <a href="https://fullstackopen.com/en/part2/adding_styles_to_react_app">fullstackopen</a>
+        <a href="https://www.theodinproject.com/dashboard">odinproject</a>
+        <a href="https://wiki.archlinux.org/">archwiki</a>
+      </div>
+
+      <div class="column">
+        <h2>work</h2>
+        <a href="https://gmail.com">gmail</a>
+        <a href="https://linkedin.com">linkedin</a>
+        <a href="https://drive.google.com/">drive</a>
+        <a href="https://chatgpt.com">chatgpt</a>
+      </div>
+
+      <div class="column">
+        <h2>social</h2>
+        <a href="https://reddit.com">reddit</a>
+        <a href="https://x.com">twitter</a>
+        <a href="https://pinterest.com">pinterest</a>
+        <a href="https://youtube.com">youtube</a>
+      </div>
+
+    </div>
+
+  </div>
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('clock').textContent = `${hours}:${minutes}`;
+
+      const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+      const day = days[now.getDay()];
+      const date = String(now.getDate()).padStart(2, '0');
+      document.getElementById('date').textContent = `[ ${day} ${date} ]`;
+    }
+
+    function setGreeting() {
+      const h = new Date().getHours();
+      const greet = h < 5  ? "working late, abhi" :
+                    h < 12 ? "good morning, abhi" :
+                    h < 17 ? "good afternoon, abhi" :
+                    h < 21 ? "good evening, abhi" :
+                             "good night, abhi";
+      document.getElementById('greeting').textContent = greet;
+    }
+
+    updateClock();
+    setGreeting();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>

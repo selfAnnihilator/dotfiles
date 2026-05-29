@@ -1,0 +1,171 @@
+
+body {
+  margin: 0;
+  background: var(--background);
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--foreground) 7%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 28px 28px;
+  color: var(--foreground);
+
+  font-family: "Press Start 2P", monospace;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#greeting {
+  font-size: 0.7rem;
+  color: var(--color4);
+  opacity: 0.5;
+  letter-spacing: 0.15rem;
+  margin-bottom: 0;
+}
+
+#clock {
+  font-size: 8.5rem;
+  line-height: 1;
+  letter-spacing: 0.1rem;
+
+  color: var(--foreground);
+  margin-bottom: 2rem;
+
+  image-rendering: pixelated;
+
+  /* subtle accent halo — gives the clock visual weight without being loud */
+  text-shadow:
+    0 0 40px color-mix(in srgb, var(--color4) 25%, transparent);
+}
+
+#date {
+  font-size: 1rem;
+  color: var(--color4);
+
+  opacity: 0.65;
+
+  margin-top: -1rem; /* pulls it closer to clock */
+
+  letter-spacing: 0.25rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 3rem; /* vertical gap between clock section and cards */
+}
+
+/* thin accent rule between clock/date and link cards */
+.container::after {
+  content: "";
+  display: block;
+  order: 1;
+  width: 120px;
+  height: 1px;
+  background: color-mix(in srgb, var(--color4) 45%, transparent);
+  margin: -0.5rem 0;
+}
+
+/* push .links below the separator line */
+.links {
+  order: 2;
+}
+
+.links {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+  gap: 4.5rem;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 950px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  gap: 0.6rem;
+
+  min-height: unset;
+  min-width: 185px;
+  max-width: 230px;
+
+  padding: 1.4rem 1.6rem 2rem;
+
+  /* very faint warm tint — enough to lift cards off the background */
+  background: color-mix(in srgb, var(--background) 78%, var(--foreground) 22%);
+
+  border-top: 2px solid var(--color4);
+  border-right: 1px solid color-mix(in srgb, var(--foreground) 18%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--foreground) 18%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--foreground) 18%, transparent);
+
+  box-shadow:
+    2px 2px 0 color-mix(in srgb, var(--foreground) 12%, transparent);
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-top-color 0.15s ease;
+}
+
+.column:hover {
+  transform: translate(-2px, -2px);
+
+  box-shadow:
+    4px 4px 0 color-mix(in srgb, var(--color4) 50%, transparent);
+}
+
+.column h2 {
+  color: var(--color4);
+  font-size: 1.1rem;
+
+  margin-bottom: 0.9rem;
+}
+
+a {
+  color: var(--foreground);
+  font-size: 0.85rem;
+  text-decoration: none;
+  padding-left: 0.2rem;
+  line-height: 1.5;
+
+  transition: transform 0.15s ease;
+}
+
+a::before {
+  content: "~> ";
+  color: var(--color4);
+  opacity: 0.7;
+}
+
+a:hover {
+  color: var(--color4);
+  transform: translateX(3px);
+}
+
+a:hover::after {
+  content: "_";
+  color: var(--color4);
+
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.prompt {
+  font-size: 0.7rem;
+  color: var(--color4);
+
+  opacity: 0.8;
+}
