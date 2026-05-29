@@ -25,7 +25,8 @@ ok "AUR helper ready"
 
 # ── 3. Required packages ─────────────────────────────────────────
 info "Installing required packages..."
-yay -S --needed --noconfirm \
+# --overwrite='*' handles file conflicts; --ask=4 auto-removes conflicting packages
+yay -S --needed --noconfirm --overwrite='*' --ask=4 \
     niri \
     quickshell \
     cava \
@@ -120,11 +121,13 @@ git config --global init.defaultBranch main 2>/dev/null || true
 if [ ! -d "$HOME/zanken" ]; then
     info "Cloning zanken..."
     git clone "$ZANKEN_REPO" "$HOME/zanken"
-    ok "zanken ready at ~/zanken"
 else
-    warn "~/zanken already exists, pulling latest..."
-    git -C "$HOME/zanken" pull --rebase || true
+    info "Resetting zanken to latest..."
+    git -C "$HOME/zanken" fetch origin
+    git -C "$HOME/zanken" reset --hard "origin/$(git -C "$HOME/zanken" rev-parse --abbrev-ref HEAD)"
+    git -C "$HOME/zanken" clean -fd
 fi
+ok "zanken ready"
 
 # ── 5. Dotfiles bare repo ────────────────────────────────────────
 if [ ! -d "$HOME/dotfiles" ]; then
@@ -132,27 +135,15 @@ if [ ! -d "$HOME/dotfiles" ]; then
     git clone --bare "$DOTFILES_REPO" "$HOME/dotfiles"
     git --git-dir="$HOME/dotfiles" --work-tree="$HOME" \
         config --local status.showUntrackedFiles no
-
-    # Back up any files that would be overwritten
-    conflicts=$(git --git-dir="$HOME/dotfiles" --work-tree="$HOME" checkout 2>&1 \
-        | grep -E "^\s+" | awk '{print $1}' || true)
-    if [ -n "$conflicts" ]; then
-        warn "Backing up conflicting files..."
-        mkdir -p "$HOME/.dotfiles-backup"
-        echo "$conflicts" | xargs -I{} bash -c \
-            'src="$HOME/{}"; dst="$HOME/.dotfiles-backup/{}"; mkdir -p "$(dirname "$dst")"; mv "$src" "$dst"'
-    fi
-
-    git --git-dir="$HOME/dotfiles" --work-tree="$HOME" checkout --force
-    ok "Dotfiles checked out"
-
-    # Set qutebrowser as default browser once dotfiles are in place
-    xdg-settings set default-web-browser org.qutebrowser.qutebrowser.desktop 2>/dev/null || true
 else
-    warn "~/dotfiles already exists, pulling latest..."
-    git --git-dir="$HOME/dotfiles" --work-tree="$HOME" pull --rebase || true
-    git --git-dir="$HOME/dotfiles" --work-tree="$HOME" checkout --force || true
+    info "Updating dotfiles..."
+    git --git-dir="$HOME/dotfiles" --work-tree="$HOME" fetch origin
+    git --git-dir="$HOME/dotfiles" --work-tree="$HOME" \
+        reset --hard "origin/$(git --git-dir="$HOME/dotfiles" rev-parse --abbrev-ref HEAD 2>/dev/null || echo main)"
 fi
+git --git-dir="$HOME/dotfiles" --work-tree="$HOME" checkout --force
+ok "Dotfiles applied"
+xdg-settings set default-web-browser org.qutebrowser.qutebrowser.desktop 2>/dev/null || true
 
 # ~/.local/share/zanken → zanken repo (legacy path some tools may probe)
 mkdir -p "$HOME/.local/share/zanken"
@@ -176,7 +167,8 @@ fi
 if [ ! -d "$HOME/.local/share/qylock" ]; then
     info "Cloning qylock..."
     git clone https://github.com/Darkkal44/qylock "$HOME/.local/share/qylock"
-    ok "qylock ready"
+else
+    git -C "$HOME/.local/share/qylock" pull --rebase 2>/dev/null || true
 fi
 ln -sfn "$HOME/.local/share/qylock/themes" \
     "$HOME/.local/share/qylock/quickshell-lockscreen/themes_link"
@@ -240,8 +232,7 @@ export PATH="$HOME/zanken/bin:$PATH"
 ZANKEN_THEME_SKIP_BACKGROUND=1 "$HOME/zanken/bin/zanken-theme-set" "tokyo-night" 2>/dev/null || true
 
 # Default mono font for quickshell bar icons (written by zanken-font-set normally)
-[ -f "$HOME/.config/zanken/current/mono-font" ] || \
-    printf 'JetBrainsMono Nerd Font' > "$HOME/.config/zanken/current/mono-font"
+printf 'JetBrainsMono Nerd Font' > "$HOME/.config/zanken/current/mono-font"
 
 # Btop theme symlink
 mkdir -p "$HOME/.config/btop/themes"
@@ -267,11 +258,9 @@ done
 rm -rf "$HOME/.config/zanken/backgrounds"
 ln -sfn "$HOME/Pictures/wallpapers" "$HOME/.config/zanken/backgrounds"
 
-# Create background symlink so swaybg works on first niri launch
-if [ ! -L "$HOME/.config/zanken/current/background" ]; then
-    FIRST_BG=$(find "$HOME/Pictures/wallpapers/tokyo-night" -maxdepth 1 -type f 2>/dev/null | sort | head -1)
-    [ -n "$FIRST_BG" ] && ln -sfn "$FIRST_BG" "$HOME/.config/zanken/current/background"
-fi
+# Reset background symlink so swaybg has a valid target
+FIRST_BG=$(find "$HOME/Pictures/wallpapers/tokyo-night" -maxdepth 1 -type f 2>/dev/null | sort | head -1)
+[ -n "$FIRST_BG" ] && ln -sfn "$FIRST_BG" "$HOME/.config/zanken/current/background"
 
 # Elephant menus (app launcher context menus)
 mkdir -p "$HOME/.config/elephant/menus"
