@@ -71,6 +71,9 @@ yay -S --needed --noconfirm --overwrite='*' --ask=4 \
     ufw \
     ttf-jetbrains-mono-nerd \
     noto-fonts-cjk \
+    qt6-5compat \
+    imagemagick \
+    socat \
     qutebrowser \
     python-adblock \
     qt6-multimedia-ffmpeg \
@@ -242,24 +245,11 @@ ln -snf "$HOME/.config/zanken/current/theme/btop.theme" "$HOME/.config/btop/them
 mkdir -p "$HOME/.config/mako"
 ln -snf "$HOME/.config/zanken/current/theme/mako.ini" "$HOME/.config/mako/config"
 
-# Wallpapers → ~/Pictures/wallpapers/<theme>/
-# Backgrounds are tracked in zanken/themes/*/backgrounds/; install.sh seeds them
-info "Seeding wallpapers to ~/Pictures/wallpapers/..."
-mkdir -p "$HOME/Pictures/wallpapers"
-for theme_dir in "$HOME/zanken/themes"/*/; do
-    theme=$(basename "$theme_dir")
-    if [ -d "$theme_dir/backgrounds" ] && [ -n "$(ls -A "$theme_dir/backgrounds" 2>/dev/null)" ]; then
-        mkdir -p "$HOME/Pictures/wallpapers/$theme"
-        cp -rn "$theme_dir/backgrounds/." "$HOME/Pictures/wallpapers/$theme/" 2>/dev/null || true
-    fi
-done
-
-# ~/.config/zanken/backgrounds → ~/Pictures/wallpapers so bg picker finds them
+# Wallpapers come from dotfiles checkout at ~/Pictures/wallpaper/
+# Set up backgrounds symlink and pick an initial wallpaper for swaybg
 rm -rf "$HOME/.config/zanken/backgrounds"
-ln -sfn "$HOME/Pictures/wallpapers" "$HOME/.config/zanken/backgrounds"
-
-# Reset background symlink so swaybg has a valid target
-FIRST_BG=$(find "$HOME/Pictures/wallpapers/tokyo-night" -maxdepth 1 -type f 2>/dev/null | sort | head -1)
+ln -sfn "$HOME/Pictures/wallpaper" "$HOME/.config/zanken/backgrounds"
+FIRST_BG=$(find "$HOME/Pictures/wallpaper" -maxdepth 1 -type f | sort | head -1)
 [ -n "$FIRST_BG" ] && ln -sfn "$FIRST_BG" "$HOME/.config/zanken/current/background"
 
 # Elephant menus (app launcher context menus)
