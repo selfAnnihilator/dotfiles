@@ -80,7 +80,8 @@ Item {
     readonly property bool favMode:  root.categoryFilter === Data.favCategory
     readonly property bool histMode: root.categoryFilter === Data.histCategory
     readonly property bool procMode:     root.categoryFilter === Data.procCategory
-    readonly property bool themeMode:    root.categoryFilter === Data.themeCategory
+    readonly property bool themeMode:     root.categoryFilter === Data.themeCategory
+    readonly property bool lockThemeMode: root.categoryFilter === Data.lockThemeCategory
     readonly property bool keybindMode:  root.categoryFilter === Data.keybindCategory
     // Quick mode swaps the result list for a live-tile grid. Tiles bind
     // to nav telemetry for instantaneous state; clicking one drops an
@@ -321,6 +322,13 @@ Item {
     readonly property alias themeItems:   themes.items
     readonly property alias themeLoaded:  themes.loaded
 
+    LockThemes {
+        id: lockThemes
+        active: root.lockThemeMode
+    }
+    readonly property alias lockThemeItems:  lockThemes.items
+    readonly property alias lockThemeLoaded: lockThemes.loaded
+
     NiriKeybinds {
         id: niriKeybinds
         active: root.keybindMode
@@ -394,7 +402,7 @@ Item {
     // 200+ entry array on unrelated property touches.
     property var omarchy: []
     property var nav: []
-    readonly property var allItems: root.omarchy.concat(appScan.apps).concat(navbarApps.items).concat(tuis.items).concat(themes.items)
+    readonly property var allItems: root.omarchy.concat(appScan.apps).concat(navbarApps.items).concat(tuis.items).concat(themes.items).concat(lockThemes.items)
 
     // ---------- Launcher ----------
     // Matches omarchy's launch convention (see omarchy-launch-or-focus):
@@ -428,6 +436,15 @@ Item {
         if (item.isTheme) {
             runner.command = ["sh", "-c",
                 "setsid -f omarchy-theme-set \"$1\" >/dev/null 2>&1",
+                "sh", item.themeName];
+            runner.running = false;
+            runner.running = true;
+            root.close();
+            return;
+        }
+        if (item.isLockTheme) {
+            runner.command = ["sh", "-c",
+                "setsid -f omarchy-qylock-theme-set \"$1\" >/dev/null 2>&1",
                 "sh", item.themeName];
             runner.running = false;
             runner.running = true;
@@ -500,9 +517,10 @@ Item {
         let pool;
         if (root.favMode)        pool = bookmarks.favouriteItems;
         else if (root.histMode)  pool = bookmarks.historyItems;
-        else if (root.procMode)     pool = root.procItems;
-        else if (root.themeMode)    pool = root.themeItems;
-        else if (root.keybindMode)  pool = root.keybindItems;
+        else if (root.procMode)      pool = root.procItems;
+        else if (root.themeMode)     pool = root.themeItems;
+        else if (root.lockThemeMode) pool = root.lockThemeItems;
+        else if (root.keybindMode)   pool = root.keybindItems;
         else if (filter !== "")  pool = root.allItems.filter(it => it.category === filter);
         else                     pool = root.navRows;
 
@@ -849,6 +867,13 @@ Item {
                                         ? "NO THEMES FOUND"
                                         : total + " THEME" + (total === 1 ? "" : "S");
                                 }
+                                if (root.lockThemeMode) {
+                                    const total = root.filteredItems.length;
+                                    if (!lockThemes.loaded && total === 0) return "LOADING THEMES…";
+                                    return total === 0
+                                        ? "NO THEMES FOUND"
+                                        : total + " THEME" + (total === 1 ? "" : "S");
+                                }
                                 const total = root.filteredItems.length;
                                 if (root.query.length === 0) {
                                     return total + " ENTRIES  ·  " + root.allItems.length + " TOTAL";
@@ -879,8 +904,9 @@ Item {
                             if (root.fileMode)       verb = "OPEN FILE";
                             else if (root.ghMode)    verb = "OPEN";
                             else if (root.procMode)    verb = "KILL";
-                            else if (root.themeMode)   verb = "APPLY";
-                            else if (root.keybindMode) verb = "CLOSE";
+                            else if (root.themeMode)     verb = "APPLY";
+                            else if (root.lockThemeMode) verb = "APPLY";
+                            else if (root.keybindMode)   verb = "CLOSE";
                             return "↑↓ / TAB  ·  ↵ " + verb + "  ·  ^S STAR  ·  ESC BACK";
                         }
                         color: root.inkDeep
@@ -1247,6 +1273,7 @@ Item {
                               : root.ghMode ? "󰊤"
                               : root.procMode ? "󰍛"
                               : root.themeMode ? "󰸌"
+                              : root.lockThemeMode ? "󰌾"
                               : "󰍉"
                         color: root.seal
                         font.family: root.mono
@@ -1263,8 +1290,9 @@ Item {
                             if (root.fileMode)  return "Type to search files in ~ …";
                             if (root.ghMode)    return "Your PRs · type to search GitHub repos";
                             if (root.procMode)    return "Type to filter processes by name, user, pid…";
-                            if (root.themeMode)   return "Type to filter themes…";
-                            if (root.keybindMode) return "Type to search keybindings…";
+                            if (root.themeMode)     return "Type to filter themes…";
+                            if (root.lockThemeMode) return "Type to filter lock screen themes…";
+                            if (root.keybindMode)   return "Type to search keybindings…";
                             return "Type to search apps, themes, settings…";
                         }
                         color: root.query.length === 0 ? root.inkDeep : root.ink
@@ -1765,6 +1793,7 @@ Item {
                             if (it.isCategory)  return "→ open " + it.target.toLowerCase();
                             if (it.isProcess)   return "↵ kill " + (it.pid || "");
                             if (it.isTheme)     return "↵ omarchy-theme-set " + (it.themeName || "");
+                            if (it.isLockTheme) return "↵ qylock-theme-set " + (it.themeName || "");
                             if (it.isKeybind)   return "󰌌 " + it.title;
                             return "$ " + it.exec;
                         }

@@ -7,6 +7,7 @@ const favCategory = "Favourites";
 const histCategory = "History";
 const procCategory = "Processes";
 const themeCategory = "Themes";
+const lockThemeCategory = "Lock Theme";
 const keybindCategory = "Keybinds";
 
 // fd already respects .gitignore, the global ignore file, and skips
@@ -78,8 +79,9 @@ const categoryNav = [
     { title: "Capture", icon: "󰄀", category: "Browse", isCategory: true, target: "Capture",     keywords: "capture screenshot screenrecord ocr text extraction color picker" },
     { title: "Learn",   icon: "󰂺", category: "Browse", isCategory: true, target: "Learn",       keywords: "learn docs manual help keybindings wiki cheatsheet" },
     { title: "Processes", icon: "󰍛", category: "Browse", isCategory: true, target: procCategory,     keywords: "processes process kill task manager ps top htop activity cpu memory" },
-    { title: "Themes",    icon: "󰸌", category: "Browse", isCategory: true, target: themeCategory,    keywords: "themes theme palette color swatch switcher dark light apply" },
-    { title: "Keybindings", icon: "󰌌", category: "Browse", isCategory: true, target: keybindCategory, keywords: "keybindings shortcuts hotkeys super niri binds reference cheatsheet" }
+    { title: "Themes",    icon: "󰸌", category: "Browse", isCategory: true, target: themeCategory,        keywords: "themes theme palette color swatch switcher dark light apply" },
+    { title: "Lock Theme", icon: "󰌾", category: "Browse", isCategory: true, target: lockThemeCategory, keywords: "lock theme qylock sddm lockscreen login pixel anime" },
+    { title: "Keybindings", icon: "󰌌", category: "Browse", isCategory: true, target: keybindCategory,  keywords: "keybindings shortcuts hotkeys super niri binds reference cheatsheet" }
 ];
 
 // Every leaf action omarchy-menu can dispatch is flattened here with a
@@ -108,7 +110,7 @@ const omarchyItems = [
 
     // ----- Style -----
     { title: "Theme",            icon: "󰸌", category: "Style",   keywords: "theme color palette dark light mode appearance look style scheme switcher kanagawa tokyo dragon nord gruvbox", exec: "qs -c desktop ipc call palette openCategory \"Themes\"" },
-    { title: "SDDM Theme",      icon: "󰌾", category: "Style",   keywords: "sddm lock screen login theme qylock lockscreen pixel anime",                                            exec: "omarchy-qylock-theme-set" },
+    { title: "SDDM Theme",      icon: "󰌾", category: "Style",   keywords: "sddm lock screen login theme qylock lockscreen pixel anime",                                            exec: "qs -c desktop ipc call palette openCategory \"Lock Theme\"" },
     { title: "Background",       icon: "󰸉", category: "Style",   keywords: "background wallpaper image desktop picture backdrop bg",                                                 exec: "omarchy-theme-bg-switcher" },
     { title: "Font",             icon: "󰛖", category: "Style",   keywords: "font typeface monospace typography family character glyph nerd",                                        exec: "omarchy-font-pick", tui: "omarchy-launch-tui" },
     { title: "Round Corners",    icon: "󰘇", category: "Style",   keywords: "corners radius round soft rounded border edge shape navbar cloud popup",                              exec: "qs -c desktop ipc call corners round" },
