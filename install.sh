@@ -77,6 +77,13 @@ yay -S --needed --noconfirm --overwrite='*' --ask=4 \
     adw-gtk3 \
     uwsm \
     xdg-terminal-exec \
+    firefox \
+    nautilus \
+    btop \
+    wtype \
+    hyprpicker \
+    gnome-calculator \
+    neovim \
     qutebrowser \
     python-adblock \
     qt6-multimedia-ffmpeg \
