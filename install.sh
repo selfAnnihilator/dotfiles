@@ -111,6 +111,7 @@ if ! completed "required-packages"; then
         mpd \
         mpd-mpris \
         rmpc \
+        mpvpaper \
         gamemode \
         ufw \
         ttf-jetbrains-mono-nerd \
@@ -334,6 +335,14 @@ if ! completed "zanken-assets"; then
     ln -sfn "$HOME/Pictures/wallpaper" "$HOME/.config/zanken/backgrounds"
     FIRST_BG=$(find "$HOME/Pictures/wallpaper" -maxdepth 1 -type f 2>/dev/null | sort | head -1) || true
     [ -n "$FIRST_BG" ] && ln -sfn "$FIRST_BG" "$HOME/.config/zanken/current/background"
+
+    # Symlink qylock lock screen videos into wallpaper-video dir
+    mkdir -p "$HOME/Pictures/wallpaper-video"
+    for theme_dir in "$HOME/.local/share/qylock/themes"/*/; do
+        theme_name=$(basename "$theme_dir")
+        video="$theme_dir/bg.mp4"
+        [ -f "$video" ] && ln -sfn "$video" "$HOME/Pictures/wallpaper-video/$theme_name.mp4"
+    done
 
     # Elephant menus (app launcher context menus)
     mkdir -p "$HOME/.config/elephant/menus"

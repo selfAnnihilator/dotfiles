@@ -24,7 +24,7 @@ spawn-at-startup "hypridle"
 spawn-at-startup "swayosd-server"
 spawn-at-startup "qs" "-n" "-d" "-c" "desktop"
 spawn-at-startup "elephant"
-spawn-sh-at-startup "swaybg -i \"$HOME/.config/zanken/current/background\" -m fill"
+spawn-sh-at-startup "$HOME/.config/zanken/bin/zanken-wallpaper-start"
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-sh-at-startup "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
 spawn-sh-at-startup "dbus-update-activation-environment --systemd --all"
@@ -354,6 +354,7 @@ binds {
 
     // Background picker
     Mod+Ctrl+Space { spawn "zanken-theme-bg-switcher"; }
+    Mod+Ctrl+V { spawn "zanken-theme-videobg-switcher"; }
 
     // Theme switcher → OmniMenu Themes drill-down
     Mod+Shift+Ctrl+Space { spawn "qs" "-c" "desktop" "ipc" "call" "palette" "openCategory" "Themes"; }
