@@ -305,6 +305,7 @@ if ! completed "zanken-assets"; then
     ZANKEN_THEME_SKIP_BACKGROUND=1 "$HOME/zanken/bin/zanken-theme-set" "tokyo-night" 2>/dev/null || true
 
     # Default mono font for quickshell bar icons (written by zanken-font-set normally)
+    mkdir -p "$HOME/.config/zanken/current"
     printf 'JetBrainsMono Nerd Font' > "$HOME/.config/zanken/current/mono-font"
 
     # Default corners to round so the bar floats on first boot
@@ -327,13 +328,13 @@ if ! completed "zanken-assets"; then
     # Set up backgrounds symlink and pick an initial wallpaper for swaybg
     rm -rf "$HOME/.config/zanken/backgrounds"
     ln -sfn "$HOME/Pictures/wallpaper" "$HOME/.config/zanken/backgrounds"
-    FIRST_BG=$(find "$HOME/Pictures/wallpaper" -maxdepth 1 -type f | sort | head -1)
+    FIRST_BG=$(find "$HOME/Pictures/wallpaper" -maxdepth 1 -type f 2>/dev/null | sort | head -1) || true
     [ -n "$FIRST_BG" ] && ln -sfn "$FIRST_BG" "$HOME/.config/zanken/current/background"
 
     # Elephant menus (app launcher context menus)
     mkdir -p "$HOME/.config/elephant/menus"
     for lua in "$HOME/zanken/default/elephant/"*.lua; do
-        ln -snf "$lua" "$HOME/.config/elephant/menus/$(basename "$lua")"
+        [ -f "$lua" ] && ln -snf "$lua" "$HOME/.config/elephant/menus/$(basename "$lua")"
     done
 
     # Mimetypes
