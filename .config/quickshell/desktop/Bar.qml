@@ -302,7 +302,7 @@ PanelWindow {
                 glyph: bar.root.icoZanken
                 tooltip: "System"
                 color: bar.root.seal
-                fontFamily: "omarchy"
+                fontFamily: bar.root.serif
                 fontSize: 14
                 onActivated: {
                     bar.root.anchorPopupTo(zankenModule);
