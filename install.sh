@@ -206,6 +206,10 @@ if ! completed "dotfiles"; then
         git --git-dir="$HOME/dotfiles" --work-tree="$HOME" reset --hard FETCH_HEAD
     fi
     git --git-dir="$HOME/dotfiles" --work-tree="$HOME" checkout --force
+    # Fix hardcoded username paths in configs (dotfiles authored on abhi's machine)
+    if [ "$HOME" != "/home/abhi" ]; then
+        sed -i "s|/home/abhi/|$HOME/|g" "$HOME/.config/niri/config.kdl" 2>/dev/null || true
+    fi
     ok "Dotfiles applied"
     xdg-settings set default-web-browser org.qutebrowser.qutebrowser.desktop 2>/dev/null || true
     mark_done "dotfiles"

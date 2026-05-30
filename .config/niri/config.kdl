@@ -24,7 +24,7 @@ spawn-at-startup "hypridle"
 spawn-at-startup "swayosd-server"
 spawn-at-startup "qs" "-n" "-d" "-c" "desktop"
 spawn-at-startup "elephant"
-spawn-at-startup "swaybg" "-i" "/home/abhi/.config/zanken/current/background" "-m" "fill"
+spawn-sh-at-startup "swaybg -i \"$HOME/.config/zanken/current/background\" -m fill"
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-sh-at-startup "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
 spawn-sh-at-startup "dbus-update-activation-environment --systemd --all"
@@ -151,8 +151,8 @@ binds {
 
 
     // Lock screen
-    Mod+Ctrl+L { spawn "/home/abhi/.config/zanken/bin/zanken-system-lock"; }
-    Mod+Alt+L { spawn "/home/abhi/.config/zanken/bin/zanken-system-lock"; }
+    Mod+Ctrl+L { spawn "sh" "-c" "$HOME/.config/zanken/bin/zanken-system-lock"; }
+    Mod+Alt+L { spawn "sh" "-c" "$HOME/.config/zanken/bin/zanken-system-lock"; }
 
     // Idle / nightlight toggles
     Mod+Ctrl+I { spawn "zanken-toggle-idle"; }
@@ -350,7 +350,7 @@ binds {
     Mod+Shift+Period { spawn "qs" "-c" "desktop" "ipc" "call" "notifications" "toggleDnd"; }
 
     // Waybar toggle
-    Mod+Shift+Space { spawn "/home/abhi/.config/zanken/bin/zanken-restart-quickshell"; }
+    Mod+Shift+Space { spawn "sh" "-c" "$HOME/.config/zanken/bin/zanken-restart-quickshell"; }
 
     // Background picker
     Mod+Ctrl+Space { spawn "zanken-theme-bg-switcher"; }
