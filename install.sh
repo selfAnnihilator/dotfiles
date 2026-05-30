@@ -75,7 +75,6 @@ if ! completed "required-packages"; then
         quickshell \
         cava \
         swayosd \
-        elephant \
         elephant-bin \
         playerctl \
         brightnessctl \
