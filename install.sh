@@ -75,6 +75,8 @@ yay -S --needed --noconfirm --overwrite='*' --ask=4 \
     imagemagick \
     socat \
     adw-gtk3 \
+    uwsm \
+    xdg-terminal-exec \
     qutebrowser \
     python-adblock \
     qt6-multimedia-ffmpeg \
