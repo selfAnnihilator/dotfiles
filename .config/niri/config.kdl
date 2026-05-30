@@ -355,6 +355,7 @@ binds {
     // Background picker
     Mod+Ctrl+Space { spawn "zanken-theme-bg-switcher"; }
     Mod+Ctrl+V { spawn "zanken-theme-videobg-switcher"; }
+    Mod+Ctrl+W { spawn "zanken-theme-we-switcher"; }
 
     // Theme switcher → OmniMenu Themes drill-down
     Mod+Shift+Ctrl+Space { spawn "qs" "-c" "desktop" "ipc" "call" "palette" "openCategory" "Themes"; }

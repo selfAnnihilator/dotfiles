@@ -112,6 +112,7 @@ if ! completed "required-packages"; then
         mpd-mpris \
         rmpc \
         mpvpaper \
+        linux-wallpaperengine-git \
         gamemode \
         ufw \
         ttf-jetbrains-mono-nerd \
