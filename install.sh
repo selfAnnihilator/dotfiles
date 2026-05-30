@@ -224,6 +224,14 @@ if ! completed "default-shell"; then
     mark_done "default-shell"
 fi
 
+# ── 6b. LazyVim plugins ──────────────────────────────────────────
+if ! completed "lazyvim"; then
+    info "Installing LazyVim plugins..."
+    nvim --headless "+Lazy! sync" +qa 2>&1 | tail -3 || true
+    ok "LazyVim plugins installed"
+    mark_done "lazyvim"
+fi
+
 # ── 7. qylock lockscreen ─────────────────────────────────────────
 if ! completed "qylock"; then
     if [ ! -d "$HOME/.local/share/qylock" ]; then
