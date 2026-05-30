@@ -311,6 +311,10 @@ if ! completed "zanken-assets"; then
     mkdir -p "$HOME/.config/mako"
     ln -snf "$HOME/.config/zanken/current/theme/mako.ini" "$HOME/.config/mako/config"
 
+    # Foot terminal config symlink (enables theme includes on new instances)
+    mkdir -p "$HOME/.config/foot"
+    ln -sfn "$HOME/zanken/config/foot/foot.ini" "$HOME/.config/foot/foot.ini"
+
     # Wallpapers come from dotfiles checkout at ~/Pictures/wallpaper/
     # Set up backgrounds symlink and pick an initial wallpaper for swaybg
     rm -rf "$HOME/.config/zanken/backgrounds"
