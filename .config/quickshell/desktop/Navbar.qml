@@ -313,6 +313,7 @@ Item {
     property string batState: "Unknown"
     // Instantaneous power draw in watts; magnitude only — direction is in batState.
     property real batPower: 0
+    property bool hasBattery: false
 
     property string netIcon: "󰤯"
     property string netKind: "none"   // "eth" | "wifi" | "none"
@@ -1357,6 +1358,15 @@ Item {
     }
     Timer { interval: 1000; running: true; repeat: true; triggeredOnStart: true
         onTriggered: { tel.running = false; tel.running = true; } }
+
+    Process {
+        running: true
+        command: ["bash", "-c",
+            "[ -d /sys/class/power_supply/BAT0 ] || [ -d /sys/class/power_supply/BAT1 ] && echo 1 || echo 0"]
+        stdout: StdioCollector {
+            onStreamFinished: root.hasBattery = this.text.trim() === "1"
+        }
+    }
 
     // ---------- Workspaces (2 Hz) ----------
     Process {

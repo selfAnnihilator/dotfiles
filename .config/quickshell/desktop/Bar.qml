@@ -512,6 +512,7 @@ PanelWindow {
 
             Module {
                 id: battMod
+                visible: bar.root.hasBattery
                 root: bar.root
                 Component.onCompleted: bar.root.batteryAnchorItem = battMod
                 glyph: bar.root.batteryIcon()
