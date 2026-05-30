@@ -111,6 +111,7 @@ if ! completed "required-packages"; then
         xdg-user-dirs \
         mpd \
         mpd-mpris \
+        rmpc \
         gamemode \
         ufw \
         ttf-jetbrains-mono-nerd \
@@ -350,6 +351,11 @@ if ! completed "zanken-assets"; then
 
     # Clean stale paths from fish universal variable
     fish -c "set -e fish_user_paths; set -U fish_user_paths '$HOME/.local/bin'" 2>/dev/null || true
+
+    mkdir -p "$HOME/.config/mpd/playlists"
+    mkdir -p "$HOME/.local/share/rmpc/lyrics"
+    mkdir -p "$HOME/.local/bin"
+    chmod +x "$HOME/.local/bin/rmpc-fetch-lyrics" 2>/dev/null || true
 
     ok "zanken assets installed"
     mark_done "zanken-assets"

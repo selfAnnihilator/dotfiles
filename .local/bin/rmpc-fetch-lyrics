@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# Fetch synced lyrics from lrclib.net for the currently playing song.
+# Called by rmpc's on_song_change hook.
+
+[[ "$HAS_LRC" == "true" ]] && exit 0
+[[ -z "$TITLE" || -z "$ARTIST" ]] && exit 1
+
+# Convert MM:SS to seconds for lrclib API
+IFS=: read -r m s <<< "$DURATION"
+duration_sec=$(( 10#$m * 60 + 10#$s ))
+
+urlencode() { python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$1"; }
+
+response=$(curl -sf \
+    "https://lrclib.net/api/get?artist_name=$(urlencode "$ARTIST")&track_name=$(urlencode "$TITLE")&album_name=$(urlencode "$ALBUM")&duration=${duration_sec}")
+
+mkdir -p "$(dirname "$LRC_FILE")"
+
+write_placeholder() {
+    printf '[00:00.00] No lyrics available for this song\n' > "$LRC_FILE"
+    rmpc remote indexlrc --path "$LRC_FILE"
+}
+
+if [[ -z "$response" ]]; then
+    write_placeholder
+    exit 0
+fi
+
+synced=$(printf '%s' "$response" | python3 -c "
+import json,sys
+try:
+    d=json.load(sys.stdin)
+    print(d.get('syncedLyrics') or '')
+except:
+    pass
+")
+
+if [[ -z "$synced" ]]; then
+    write_placeholder
+    exit 0
+fi
+
+printf '%s\n' "$synced" > "$LRC_FILE"
+rmpc remote indexlrc --path "$LRC_FILE"
+rmpc remote status "Lyrics fetched" --level info --timeout 2000
