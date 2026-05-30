@@ -1296,7 +1296,7 @@ Item {
         id: sysProbe
         running: false
         command: ["bash", "-c",
-            "h=$(hostname 2>/dev/null); "
+            "h=$(cat /etc/hostname 2>/dev/null | tr -d '\\n' || uname -n 2>/dev/null); "
             + "os=$(. /etc/os-release 2>/dev/null && printf '%s' \"$PRETTY_NAME\"); "
             + "k=$(uname -r 2>/dev/null); "
             + "u=$(uptime -p 2>/dev/null); "
