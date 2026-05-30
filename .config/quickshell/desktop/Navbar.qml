@@ -1294,21 +1294,22 @@ Item {
     // ---------- One-time system info ----------
     Process {
         id: sysProbe
-        running: true
+        running: false
         command: ["bash", "-c",
-            "hostname; "
-            + "grep PRETTY_NAME /etc/os-release | cut -d'\"' -f2; "
-            + "uname -r; "
-            + "uptime -p"
+            "h=$(hostname 2>/dev/null); "
+            + "os=$(. /etc/os-release 2>/dev/null && printf '%s' \"$PRETTY_NAME\"); "
+            + "k=$(uname -r 2>/dev/null); "
+            + "u=$(uptime -p 2>/dev/null); "
+            + "printf '%s|%s|%s|%s' \"$h\" \"$os\" \"$k\" \"$u\""
         ]
         stdout: StdioCollector {
             onStreamFinished: {
-                const lines = this.text.trimEnd().split("\n");
-                if (lines.length >= 4) {
-                    root.sysHostname = lines[0];
-                    root.sysOs       = lines[1];
-                    root.sysKernel   = lines[2];
-                    root.sysUptime   = lines[3];
+                const p = this.text.trim().split("|");
+                if (p.length >= 4) {
+                    root.sysHostname = p[0];
+                    root.sysOs       = p[1];
+                    root.sysKernel   = p[2];
+                    root.sysUptime   = p[3];
                 }
             }
         }
@@ -1978,6 +1979,7 @@ Item {
         }
     }
     Component.onCompleted: {
+        sysProbe.running = true;
         refreshPowerProfile();
         wifiKnownProbe.running = true;
         try {
