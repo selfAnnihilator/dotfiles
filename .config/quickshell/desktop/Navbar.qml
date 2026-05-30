@@ -47,7 +47,7 @@ Item {
 
     // BMP Private Use Area icons; written via fromCodePoint so the source
     // stays ASCII-safe.
-    readonly property string icoZanken: "斬"
+    readonly property string icoZanken: "斬剣"
     readonly property string icoBtOn:    String.fromCodePoint(0xf294)
     readonly property string icoVol1:    String.fromCodePoint(0xf026)
     readonly property string icoVol2:    String.fromCodePoint(0xf027)
