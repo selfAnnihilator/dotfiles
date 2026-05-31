@@ -375,6 +375,9 @@ if ! completed "zanken-assets"; then
     # Hornet cursor theme
     OMARCHY_PATH="$HOME/zanken" bash "$HOME/zanken/install/config/cursor-hornet.sh" 2>/dev/null || true
 
+    # Plymouth boot splash (zanken theme with shine animation)
+    OMARCHY_PATH="$HOME/zanken" bash "$HOME/zanken/install/config/install-plymouth-zanken.sh" 2>/dev/null || true
+
     ok "zanken assets installed"
     mark_done "zanken-assets"
 fi
