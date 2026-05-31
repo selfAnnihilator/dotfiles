@@ -2014,6 +2014,7 @@ Item {
                     });
             }
         } catch(e) {}
+        const savedIdle = idleStateStore.text().trim();
         try {
             const text = barStateStore.text();
             if (text && text.length > 0) {
@@ -2021,7 +2022,7 @@ Item {
                 if (typeof s.doNotDisturb === "boolean") root.doNotDisturb = s.doNotDisturb;
             }
         } catch(e) {}
-        if (idleStateStore.text().trim() === "1") root.idleInhibit = true;
+        if (savedIdle === "1") root.idleInhibit = true;
         try {
             const text = clipStore.text();
             if (text && text.length > 0) {
