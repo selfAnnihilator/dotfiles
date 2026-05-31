@@ -136,7 +136,8 @@ if ! completed "required-packages"; then
         gst-plugins-base \
         gst-plugins-good \
         gst-plugins-bad \
-        gst-plugins-ugly
+        gst-plugins-ugly \
+        win2xcur
     ok "Packages installed"
     mark_done "required-packages"
 fi
