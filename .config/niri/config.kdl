@@ -53,14 +53,14 @@ layout {
     focus-ring {
         width 2
         // Tokyo Night accent color
-        active-color "#cc7a8c"
+        active-color "#8f4b33"
         inactive-color "#595959"
     }
 
     border {
         off
         width 2
-        active-color "#cc7a8c"
+        active-color "#8f4b33"
         inactive-color "#595959"
     }
 
