@@ -191,6 +191,13 @@ Item {
     }
 
     FileView {
+        id: bootIdFile
+        path: "/proc/sys/kernel/random/boot_id"
+        blockLoading: true
+    }
+    property string currentBootId: ""
+
+    FileView {
         id: clipStore
         path: root.clipStorePath
         blockLoading: true
@@ -217,7 +224,8 @@ Item {
     function saveBarState() {
         barStateStore.setText(JSON.stringify({
             idleInhibit: root.idleInhibit,
-            doNotDisturb: root.doNotDisturb
+            doNotDisturb: root.doNotDisturb,
+            bootId: root.currentBootId
         }));
     }
 
@@ -1992,12 +2000,14 @@ Item {
                     });
             }
         } catch(e) {}
+        root.currentBootId = bootIdFile.text().trim();
         try {
             const text = barStateStore.text();
             if (text && text.length > 0) {
                 const s = JSON.parse(text);
-                if (typeof s.idleInhibit  === "boolean") root.idleInhibit  = s.idleInhibit;
                 if (typeof s.doNotDisturb === "boolean") root.doNotDisturb = s.doNotDisturb;
+                if (typeof s.idleInhibit === "boolean" && s.bootId === root.currentBootId)
+                    root.idleInhibit = s.idleInhibit;
             }
         } catch(e) {}
         try {
