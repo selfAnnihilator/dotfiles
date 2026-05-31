@@ -2,18 +2,15 @@
 
 Personal `~/.config` dotfiles tracked as a bare git repo.
 
-> **Prerequisites**: Install [zanken](https://github.com/selfAnnihilator/zanken) first:
-> ```bash
-> bash <(curl -fsSL https://raw.githubusercontent.com/selfAnnihilator/zanken/main/install.sh) --clean
-> ```
-
-## Setup on a new machine
+## Install
 
 ```bash
-git clone --bare git@github.com:selfAnnihilator/dotfiles.git ~/dotfiles
-git --git-dir=~/dotfiles --work-tree=~ checkout
-git --git-dir=~/dotfiles --work-tree=~ config status.showUntrackedFiles no
+bash <(curl -fsSL https://raw.githubusercontent.com/selfAnnihilator/dotfiles/main/install.sh) --clean
 ```
+
+Installs all packages, clones zanken, and sets up this dotfiles repo automatically.
+
+## Manual setup (existing machine)
 
 ## Usage
 
