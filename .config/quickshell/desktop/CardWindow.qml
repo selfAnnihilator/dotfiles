@@ -87,7 +87,7 @@ PanelWindow {
         width: card.cardWidth
         height: card.cardHeight > 0 ? card.cardHeight : (bodyCol.implicitHeight + 34)
         color: card.theme.bg
-        border.color: card.theme.sep
+        border.color: Qt.rgba(card.theme.seal.r, card.theme.seal.g, card.theme.seal.b, 0.45)
         border.width: 1
         radius: card.theme.cornerRadius
 

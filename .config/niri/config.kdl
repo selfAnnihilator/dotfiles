@@ -21,7 +21,6 @@ input {
 
 // Spawn zanken daemons at startup
 spawn-at-startup "hypridle"
-spawn-at-startup "swayosd-server"
 spawn-at-startup "qs" "-n" "-d" "-c" "desktop"
 spawn-at-startup "elephant"
 spawn-sh-at-startup "$HOME/.config/zanken/bin/zanken-wallpaper-start"
