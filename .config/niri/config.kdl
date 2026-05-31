@@ -35,6 +35,11 @@ hotkey-overlay {
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
+cursor {
+    xcursor-theme "Hornet"
+    xcursor-size 24
+}
+
 prefer-no-csd
 
 layout {
