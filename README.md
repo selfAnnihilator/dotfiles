@@ -2,6 +2,11 @@
 
 Personal `~/.config` dotfiles tracked as a bare git repo.
 
+> **Prerequisites**: Install [zanken](https://github.com/selfAnnihilator/zanken) first:
+> ```bash
+> bash <(curl -fsSL https://raw.githubusercontent.com/selfAnnihilator/zanken/main/install.sh) --clean
+> ```
+
 ## Setup on a new machine
 
 ```bash
