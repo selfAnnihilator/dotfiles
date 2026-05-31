@@ -371,6 +371,9 @@ if ! completed "zanken-assets"; then
     mkdir -p "$HOME/.local/bin"
     chmod +x "$HOME/.local/bin/rmpc-fetch-lyrics" 2>/dev/null || true
 
+    # Hornet cursor theme
+    OMARCHY_PATH="$HOME/zanken" bash "$HOME/zanken/install/config/cursor-hornet.sh" 2>/dev/null || true
+
     ok "zanken assets installed"
     mark_done "zanken-assets"
 fi
