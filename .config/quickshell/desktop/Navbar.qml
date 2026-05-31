@@ -191,11 +191,10 @@ Item {
     }
 
     FileView {
-        id: bootIdFile
-        path: "/proc/sys/kernel/random/boot_id"
+        id: idleStateStore
+        path: StandardPaths.writableLocation(StandardPaths.RuntimeLocation) + "/qs-idle-inhibit"
         blockLoading: true
     }
-    property string currentBootId: ""
 
     FileView {
         id: clipStore
@@ -223,10 +222,9 @@ Item {
 
     function saveBarState() {
         barStateStore.setText(JSON.stringify({
-            idleInhibit: root.idleInhibit,
-            doNotDisturb: root.doNotDisturb,
-            bootId: root.currentBootId
+            doNotDisturb: root.doNotDisturb
         }));
+        idleStateStore.setText(root.idleInhibit ? "1" : "0");
     }
 
     onIdleInhibitChanged:  root.saveBarState()
@@ -1957,6 +1955,22 @@ Item {
         command: ["systemd-inhibit", "--what=idle", "--who=zanken", "--why=Idle inhibitor active", "--mode=block", "sleep", "infinity"]
     }
 
+    // Reset idle inhibitor before sleep (PrepareForSleep true) so it doesn't
+    // persist across suspend/hibernate. gdbus monitor stays alive forever and
+    // is restarted automatically by Quickshell if it dies.
+    Process {
+        id: sleepMonitor
+        command: ["gdbus", "monitor", "--system", "--dest", "org.freedesktop.login1",
+                  "--object-path", "/org/freedesktop/login1"]
+        running: true
+        stdout: SplitParser {
+            onRead: function(line) {
+                if (line.indexOf("PrepareForSleep") !== -1 && line.indexOf("(true,)") !== -1)
+                    root.idleInhibit = false;
+            }
+        }
+    }
+
     // ---------- Power-profile probe ----------
     // On-demand only: triggered once at startup so the Battery tile has
     // current state ready, and from setPowerProfile()/refreshPowerProfile()
@@ -2000,16 +2014,14 @@ Item {
                     });
             }
         } catch(e) {}
-        root.currentBootId = bootIdFile.text().trim();
         try {
             const text = barStateStore.text();
             if (text && text.length > 0) {
                 const s = JSON.parse(text);
                 if (typeof s.doNotDisturb === "boolean") root.doNotDisturb = s.doNotDisturb;
-                if (typeof s.idleInhibit === "boolean" && s.bootId === root.currentBootId)
-                    root.idleInhibit = s.idleInhibit;
             }
         } catch(e) {}
+        if (idleStateStore.text().trim() === "1") root.idleInhibit = true;
         try {
             const text = clipStore.text();
             if (text && text.length > 0) {
@@ -2341,7 +2353,9 @@ Item {
 
     IpcHandler {
         target: "idle"
-        function toggle(): void { root.toggleIdleInhibit(); }
+        function toggle(): void  { root.toggleIdleInhibit(); }
+        function disable(): void { root.idleInhibit = false; }
+        function enable(): void  { root.idleInhibit = true; }
     }
 
     IpcHandler {
