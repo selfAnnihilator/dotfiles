@@ -8,7 +8,6 @@ CardWindow {
     revealed: root.notificationsVisible
     cardWidth: 380
     layerNamespace: "zanken-notifications"
-    footer: "ESC CLOSE  ·  ⌫ CLEAR ALL"
 
     anchorEdge: root.barEdge
     anchorBarX: root.popupAnchorX
@@ -185,6 +184,39 @@ CardWindow {
                 }
             }
         }
+        }
+
+        Item {
+            width: parent.width
+            height: 34
+
+            Rectangle {
+                anchors { left: parent.left; right: parent.right; top: parent.top }
+                height: 1; color: root.sep; opacity: 0.5
+            }
+
+            Text {
+                anchors { left: parent.left; verticalCenter: parent.verticalCenter; leftMargin: 12 }
+                text: "ESC CLOSE"
+                color: root.inkDeep; font.family: root.mono; font.pixelSize: 10
+                font.letterSpacing: 2; opacity: 0.7
+            }
+
+            Text {
+                id: clearAllBtn
+                anchors { right: parent.right; verticalCenter: parent.verticalCenter; rightMargin: 12 }
+                text: "CLEAR ALL"
+                color: clearAllMa.containsMouse ? root.seal : root.inkDeep
+                font.family: root.mono; font.pixelSize: 10; font.letterSpacing: 2
+                opacity: clearAllMa.containsMouse ? 1.0 : 0.7
+                Behavior on color { ColorAnimation { duration: 100 } }
+                MouseArea {
+                    id: clearAllMa
+                    anchors.fill: parent; anchors.margins: -6
+                    hoverEnabled: true; cursorShape: Qt.PointingHandCursor
+                    onClicked: root.dismissAllNotifications()
+                }
+            }
         }
     }
 }

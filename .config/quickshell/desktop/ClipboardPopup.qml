@@ -10,7 +10,6 @@ CardWindow {
     revealed: root.clipboardVisible
     cardWidth: 420
     layerNamespace: "zanken-clipboard"
-    footer: "ESC CLOSE  ·  ⌫ CLEAR HISTORY"
 
     anchorEdge: root.barEdge
     anchorBarX: root.popupAnchorX
@@ -527,6 +526,40 @@ CardWindow {
                             }
                         }
                     }
+                }
+            }
+        }
+
+        Item {
+            width: parent.width
+            height: 34
+
+            Rectangle {
+                anchors { left: parent.left; right: parent.right; top: parent.top }
+                height: 1; color: clipPopup.root.sep; opacity: 0.5
+            }
+
+            Text {
+                anchors { left: parent.left; verticalCenter: parent.verticalCenter; leftMargin: 12 }
+                text: "ESC CLOSE"
+                color: clipPopup.root.inkDeep; font.family: clipPopup.root.mono; font.pixelSize: 10
+                font.letterSpacing: 2; opacity: 0.7
+            }
+
+            Text {
+                id: clearHistBtn
+                visible: clipPopup.activeTab === 0
+                anchors { right: parent.right; verticalCenter: parent.verticalCenter; rightMargin: 12 }
+                text: "CLEAR HISTORY"
+                color: clearHistMa.containsMouse ? clipPopup.root.seal : clipPopup.root.inkDeep
+                font.family: clipPopup.root.mono; font.pixelSize: 10; font.letterSpacing: 2
+                opacity: clearHistMa.containsMouse ? 1.0 : 0.7
+                Behavior on color { ColorAnimation { duration: 100 } }
+                MouseArea {
+                    id: clearHistMa
+                    anchors.fill: parent; anchors.margins: -6
+                    hoverEnabled: true; cursorShape: Qt.PointingHandCursor
+                    onClicked: clipPopup.root.clearClipHistory()
                 }
             }
         }
