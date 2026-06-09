@@ -256,7 +256,9 @@ Item {
     }
     function dismissAllNotifications() {
         root.toastItems = [];
-        root.cardItems.forEach(function(c) { if (c.notif) c.notif.dismiss(); });
+        root.cardItems.forEach(function(c) {
+            try { if (c.notif) c.notif.dismiss(); } catch(e) {}
+        });
         root.cardItems = [];
         notifStore.setText("[]");
     }
