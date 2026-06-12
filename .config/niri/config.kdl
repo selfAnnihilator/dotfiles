@@ -20,6 +20,8 @@ input {
 }
 
 // Spawn zanken daemons at startup
+spawn-at-startup "wl-clip-persist" "--clipboard" "regular"
+spawn-sh-at-startup "wl-paste --watch cliphist store"
 spawn-at-startup "hypridle"
 spawn-at-startup "qs" "-n" "-d" "-c" "desktop"
 spawn-at-startup "elephant"
@@ -58,14 +60,14 @@ layout {
     focus-ring {
         width 2
         // Tokyo Night accent color
-        active-color "#8f4b33"
+        active-color "#e21a5d"
         inactive-color "#595959"
     }
 
     border {
         off
         width 2
-        active-color "#8f4b33"
+        active-color "#e21a5d"
         inactive-color "#595959"
     }
 
@@ -276,9 +278,9 @@ binds {
     Mod+Alt+F { maximize-window-to-edges; }
     Mod+Ctrl+F { expand-column-to-available-width; }
 
-    // Universal clipboard (Ctrl+Insert/Shift+Insert: works in terminals + GUI apps)
+    // Universal clipboard — Shift+Insert for terminals, Ctrl+V for browsers/GUI
     Mod+C { spawn "wtype" "-M" "ctrl" "-k" "Insert" "-m" "ctrl"; }
-    Mod+V { spawn "wtype" "-M" "shift" "-k" "Insert" "-m" "shift"; }
+    Mod+V { spawn "zanken-paste"; }
     Mod+X { spawn "wtype" "-M" "ctrl" "-k" "x" "-m" "ctrl"; }
 
     Mod+Shift+C { center-column; }
