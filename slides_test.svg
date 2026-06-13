@@ -1,0 +1,12 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="400" height="300" fill="#FDF6F0"/>
+  <circle cx="200" cy="120" r="70" fill="#7C3AED"/>
+  <circle cx="200" cy="120" r="45" fill="#FDF6F0"/>
+  <polygon points="200,60 215,105 262,105 224,133 238,178 200,150 162,178 176,133 138,105 185,105" fill="#F59E0B"/>
+  <rect x="80" y="220" width="240" height="50" rx="10" fill="#10B981"/>
+  <!-- "SVG WORKS" as outlined paths via simple geometric letters would be ideal,
+       but to keep it readable yet font-free we draw a checkmark instead -->
+  <path d="M 120 245 L 140 262 L 180 228" stroke="#FDF6F0" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="250" cy="245" r="14" fill="#FDF6F0"/>
+  <circle cx="290" cy="245" r="14" fill="#FDF6F0" opacity="0.6"/>
+</svg>
