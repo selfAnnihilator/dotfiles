@@ -17,6 +17,8 @@ end
 alias dotfiles='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
 alias silksong='prime-run wine /home/abhi/Downloads/game/Hollow.Knight.Silksong.v1.0.29315/game/Hollow\ Knight\ Silksong.exe'
 alias terraria='prime-run wine /home/abhi/.wine/drive_c/GOG\ Games/Terraria/Launch\ Terraria.lnk'
-
+alias sekiro='prime-run wine /home/abhi/Downloads/game/Sekiro.Shadows.Die.Twice.GOTY.Edition/Sekiro/sekiro.exe'
+alias mecharena='prime-run wine "/home/abhi/.wine/drive_c/users/abhi/AppData/Local/PlariumPlay/PlariumPlay.exe"'
+alias quit-mecharena='pkill -9 -fi "plarium"; pkill -9 -fi "mech arena"'
 # Added by Antigravity CLI installer
 set -gx PATH "/home/abhi/.local/bin" $PATH
