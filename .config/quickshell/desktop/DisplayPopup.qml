@@ -56,7 +56,7 @@ CardWindow {
             if (r.displayRow === 3) {
                 r.applyPreset(r.displayPresets[r.selectedPreset]);
             } else if (r.displayRow === 4) {
-                r.run("zanken-launch-editor ~/.config/hypr/monitors.lua");
+                r.run("zanken-launch-editor ~/.config/niri/config.kdl");
                 r.displayVisible = false;
             } else if (r.displayRow === 5) r.blankScreen();
             else if (r.displayRow === 6) r.resetDisplay();
@@ -71,7 +71,7 @@ CardWindow {
         } else if (k === Qt.Key_B) {
             r.blankScreen();
         } else if (k === Qt.Key_E) {
-            r.run("zanken-launch-editor ~/.config/hypr/monitors.lua");
+            r.run("zanken-launch-editor ~/.config/niri/config.kdl");
             r.displayVisible = false;
         } else {
             return;
@@ -176,7 +176,7 @@ CardWindow {
                 selected: displayPopup.root.displayRow === 4
                 onActivated: {
                     displayPopup.root.displayRow = 4;
-                    displayPopup.root.run("zanken-launch-editor ~/.config/hypr/monitors.lua");
+                    displayPopup.root.run("zanken-launch-editor ~/.config/niri/config.kdl");
                     displayPopup.root.displayVisible = false;
                 }
             }

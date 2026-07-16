@@ -50,7 +50,7 @@ Item {
             if (r.displayRow === 3) {
                 r.applyPreset(r.displayPresets[r.selectedPreset]);
             } else if (r.displayRow === 4) {
-                r.run("zanken-launch-editor ~/.config/hypr/monitors.lua");
+                r.run("zanken-launch-editor ~/.config/niri/config.kdl");
                 body.close();
             } else if (r.displayRow === 5) {
                 r.blankScreen();
@@ -174,7 +174,7 @@ Item {
                 onActivated: {
                     if (!body.nav) return;
                     body.nav.displayRow = 4;
-                    body.nav.run("zanken-launch-editor ~/.config/hypr/monitors.lua");
+                    body.nav.run("zanken-launch-editor ~/.config/niri/config.kdl");
                     body.close();
                 }
             }

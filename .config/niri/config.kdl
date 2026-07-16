@@ -183,7 +183,7 @@ binds {
     Mod+Ctrl+Alt+R { spawn "zanken-reminder" "show"; }
 
     // Color picker
-    Mod+Print { spawn "hyprpicker" "-a"; }
+    Mod+Print { spawn "zanken-capture-colorpicker"; }
 
     // Close window
     Mod+Q repeat=false { close-window; }

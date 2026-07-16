@@ -153,7 +153,7 @@ const zankenItems = [
     { title: "Screenshot",          icon: "󰄀", category: "Capture", keywords: "screenshot screen capture image png shot snip print",                              exec: "zanken-capture-screenshot" },
     { title: "Screen Record",       icon: "󰑊", category: "Capture", keywords: "screen record video capture mp4 gif",                                              exec: "zanken-capture-screenrecording" },
     { title: "Text Extraction (OCR)",icon: "󰴑", category: "Capture", keywords: "ocr text extract recognize image scan copy",                                       exec: "zanken-capture-text-extraction" },
-    { title: "Color Picker",        icon: "󰃉", category: "Capture", keywords: "color picker hex rgb hyprpicker dropper sample eyedropper",                        exec: "bash -c 'pkill hyprpicker || hyprpicker -a'" },
+    { title: "Color Picker",        icon: "󰃉", category: "Capture", keywords: "color picker hex rgb dropper sample eyedropper",                                  exec: "zanken-capture-colorpicker" },
     { title: "Notes",               icon: "󰍔", category: "Capture", keywords: "notes note markdown scratchpad journal nvim neovim editor write text omni-notes",  exec: "bash -c 'mkdir -p \"$HOME/Documents/omni-notes\" && cd \"$HOME/Documents/omni-notes\" && nvim .'", tui: "zanken-launch-tui" },
 
     // ----- Trigger -----
