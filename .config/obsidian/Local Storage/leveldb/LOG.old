@@ -1,3 +1,6 @@
-2026/06/16-22:35:28.332 3e7543 Reusing MANIFEST /home/abhi/.config/obsidian/Local Storage/leveldb/MANIFEST-000001
-2026/06/16-22:35:28.336 3e7543 Recovering log #7
-2026/06/16-22:35:28.336 3e7543 Reusing old log /home/abhi/.config/obsidian/Local Storage/leveldb/000007.log 
+2026/10/08-11:28:00.703 34ccef Reusing MANIFEST /home/abhi/.config/obsidian/Local Storage/leveldb/MANIFEST-000001
+2026/10/08-11:28:00.707 34ccef Recovering log #7
+2026/10/08-11:28:00.710 34ccef Reusing old log /home/abhi/.config/obsidian/Local Storage/leveldb/000007.log 
+2026/10/08-11:58:17.420 34ccd9 Level-0 table #11: started
+2026/10/08-11:58:17.421 34ccd9 Level-0 table #11: 8806 bytes OK
+2026/10/08-11:58:17.423 34ccd9 Delete type=0 #7

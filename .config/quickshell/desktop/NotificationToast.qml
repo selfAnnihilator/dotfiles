@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Wayland
+import Quickshell.Services.Notifications
 
 PanelWindow {
     id: toastPanel
@@ -52,7 +53,7 @@ PanelWindow {
 
         Timer {
             interval: notif.expireTimeout > 0 ? notif.expireTimeout : 5000
-            running: true
+            running: notif.urgency !== NotificationUrgency.Critical
             onTriggered: toastPanel.root.removeFromToast(notif)
         }
 

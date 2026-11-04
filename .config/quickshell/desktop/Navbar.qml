@@ -173,7 +173,7 @@ Item {
             const item = { appName: n.appName, summary: n.summary, body: n.body, time: Date.now(), notif: n };
             root.cardItems = root.cardItems.concat([item]);
             root.saveNotifications();
-            if (!root.doNotDisturb)
+            if (!root.doNotDisturb || n.urgency === NotificationUrgency.Critical)
                 root.toastItems = root.toastItems.concat([n]);
         }
     }
@@ -578,6 +578,46 @@ Item {
     property string mm: "--"
     property string dd: "--"
     property string mon: "---"
+
+    // ---------- Screen recording state ----------
+    // The recorder writes its PID and start epoch only after the portal has
+    // accepted capture and the output file exists. This avoids a misleading
+    // REC indicator while the user is still in the portal picker.
+    property bool screenRecordingActive: false
+    property int screenRecordingStartedAt: 0
+    property int screenRecordingElapsed: 0
+
+    function refreshScreenRecording() {
+        screenRecordingProbe.running = false;
+        screenRecordingProbe.running = true;
+    }
+
+    function updateScreenRecordingElapsed() {
+        root.screenRecordingElapsed = root.screenRecordingActive
+            ? Math.max(0, Math.floor(Date.now() / 1000) - root.screenRecordingStartedAt)
+            : 0;
+    }
+
+    function screenRecordingLabel() {
+        const total = root.screenRecordingElapsed;
+        const hours = Math.floor(total / 3600);
+        const minutes = Math.floor((total % 3600) / 60);
+        const seconds = total % 60;
+        const pad = n => String(n).padStart(2, "0");
+        return hours > 0 ? hours + ":" + pad(minutes) + ":" + pad(seconds)
+                         : pad(minutes) + ":" + pad(seconds);
+    }
+
+    function startScreenRecording() {
+        if (!root.screenRecordingActive)
+            root.run("zanken-capture-screenrecording");
+        recordingProbeDelay.restart();
+    }
+
+    function stopScreenRecording() {
+        root.run("zanken-capture-screenrecording --stop-recording");
+        recordingProbeDelay.restart();
+    }
 
     // ---------- Screenshots popup state ----------
     property bool screenshotsVisible: false
@@ -2057,6 +2097,51 @@ Item {
     }
     Timer { interval: 21600000; running: true; repeat: true; triggeredOnStart: true
         onTriggered: root.refreshOmarchyUpdateCheck() }
+
+    // ---------- Screen recording probe ----------
+    Process {
+        id: screenRecordingProbe
+        running: false
+        command: ["sh", "-c",
+            "state=" + JSON.stringify((Quickshell.env("XDG_RUNTIME_DIR") || "/tmp")
+                + "/zanken-screenrecording.state") + "; "
+          + "[ -r \"$state\" ] || exit 1; "
+          + "read -r pid started < \"$state\"; "
+          + "case \"$pid\" in *[!0-9]*|'') exit 1;; esac; "
+          + "case \"$started\" in *[!0-9]*|'') exit 1;; esac; "
+          + "kill -0 \"$pid\" 2>/dev/null || exit 1; "
+          + "printf '%s %s\\n' \"$pid\" \"$started\""
+        ]
+        stdout: StdioCollector { id: screenRecordingOut }
+        onExited: (code, status) => {
+            const previous = root.screenRecordingActive;
+            const parts = screenRecordingOut.text.trim().split(/\s+/);
+            root.screenRecordingActive = code === 0 && parts.length === 2;
+            root.screenRecordingStartedAt = root.screenRecordingActive ? Number(parts[1]) : 0;
+            root.updateScreenRecordingElapsed();
+            if (previous && !root.screenRecordingActive) root.refreshVideos();
+        }
+    }
+    Timer {
+        id: recordingProbeTimer
+        interval: 1000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+        onTriggered: root.refreshScreenRecording()
+    }
+    Timer {
+        id: recordingProbeDelay
+        interval: 700
+        repeat: false
+        onTriggered: root.refreshScreenRecording()
+    }
+    Timer {
+        interval: 1000
+        running: true
+        repeat: true
+        onTriggered: root.updateScreenRecordingElapsed()
+    }
 
     // ---------- Screenshots list probe ----------
     // Cap at 60 entries (~5 pages) so a screenshot-heavy ~/Pictures

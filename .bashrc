@@ -13,3 +13,6 @@ source ~/.local/share/omarchy/default/bash/rc
 
 # Added by Antigravity CLI installer
 export PATH="/home/abhi/.local/bin:$PATH"
+
+# SLSsteam: Add wrapper to PATH
+export PATH="$HOME/.local/share/SLSsteam/path:$PATH"

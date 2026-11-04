@@ -1,8 +1,8 @@
 import QtQuick
 
 // Screenshots detail — recent thumbs (4-column grid). Keyboard:
-// arrows move through the grid, Enter copies to clipboard, Shift+Enter
-// opens in the default viewer. Index 0 is the CAPTURE button.
+    // arrows move through the grid, Enter copies to clipboard, Shift+Enter
+    // opens in the default viewer. Indices 0 and 1 are CAPTURE and RECORD.
 Item {
     id: body
     required property var root
@@ -18,16 +18,17 @@ Item {
 
     Component.onCompleted: if (body.nav) body.nav.refreshScreenshots()
 
-    property int kbdIndex: 1   // 0 = CAPTURE, 1..N = thumbs
+    property int kbdIndex: 2   // 0 = CAPTURE, 1 = RECORD, 2..N = thumbs
     readonly property var _items: body.nav ? body.nav.screenshotFiles.slice(0, cols * 4) : []
-    readonly property int _kbdMax: 1 + _items.length
+    readonly property int _kbdMax: 2 + _items.length
 
     function kbdHandle(event) {
         const k = event.key;
         const n = body._kbdMax;
         if (n === 0) return false;
         if (k === Qt.Key_Left) {
-            if (body.kbdIndex > 1) body.kbdIndex = Math.max(1, body.kbdIndex - 1);
+            if (body.kbdIndex > 2) body.kbdIndex = Math.max(2, body.kbdIndex - 1);
+            else if (body.kbdIndex === 2) body.kbdIndex = 1;
             else if (body.kbdIndex === 1) body.kbdIndex = 0;
             return true;
         }
@@ -38,7 +39,7 @@ Item {
         if (k === Qt.Key_Up) {
             if (body.kbdIndex === 0) return true;
             const newIdx = body.kbdIndex - body.cols;
-            body.kbdIndex = newIdx >= 1 ? newIdx : 0;
+            body.kbdIndex = newIdx >= 2 ? newIdx : 0;
             return true;
         }
         if (k === Qt.Key_Down) {
@@ -51,7 +52,14 @@ Item {
                 body.close();
                 return true;
             }
-            const it = body._items[body.kbdIndex - 1];
+            if (body.kbdIndex === 1) {
+                if (body.nav) {
+                    if (body.nav.screenRecordingActive) body.nav.stopScreenRecording();
+                    else body.nav.startScreenRecording();
+                }
+                return true;
+            }
+            const it = body._items[body.kbdIndex - 2];
             if (it && body.nav) body.nav.copyScreenshotToClipboard(it.path);
             return true;
         }
@@ -72,10 +80,10 @@ Item {
             Text {
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
-                text: body.nav
-                      ? body.nav.screenshotFiles.length + " RECENT"
-                      : "—"
-                color: body.root.inkDeep
+                text: body.nav && body.nav.screenRecordingActive
+                      ? "● REC " + body.nav.screenRecordingLabel()
+                      : body.nav ? body.nav.screenshotFiles.length + " RECENT" : "—"
+                color: body.nav && body.nav.screenRecordingActive ? body.root.seal : body.root.inkDeep
                 font.family: body.root.mono
                 font.pixelSize: 10
                 font.letterSpacing: 2
@@ -94,6 +102,17 @@ Item {
                         body.close();
                     }
                 }
+                QuickButton {
+                    root: body.root
+                    glyph: body.nav && body.nav.screenRecordingActive ? body.root.icoStop : ""
+                    label: body.nav && body.nav.screenRecordingActive ? "STOP" : "RECORD"
+                    selected: body.kbdIndex === 1 || (body.nav && body.nav.screenRecordingActive)
+                    onClicked: {
+                        if (!body.nav) return;
+                        if (body.nav.screenRecordingActive) body.nav.stopScreenRecording();
+                        else body.nav.startScreenRecording();
+                    }
+                }
             }
         }
 
@@ -107,7 +126,7 @@ Item {
                 delegate: Rectangle {
                     required property var modelData
                     required property int index
-                    readonly property bool kbdFocused: body.kbdIndex === (index + 1)
+                    readonly property bool kbdFocused: body.kbdIndex === (index + 2)
                     width: body.cellW
                     height: body.cellH
                     radius: body.root.cornerRadius
@@ -198,7 +217,7 @@ Item {
                         acceptedButtons: Qt.LeftButton | Qt.RightButton
                         onClicked: (e) => {
                             if (!body.nav) return;
-                            body.kbdIndex = index + 1;
+                            body.kbdIndex = index + 2;
                             if (e.button === Qt.RightButton)
                                 body.nav.run("xdg-open " + JSON.stringify(modelData.path));
                             else

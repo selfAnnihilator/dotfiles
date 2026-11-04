@@ -191,7 +191,8 @@ PanelWindow {
             id: musicItem
             visible: bar.root.isHorizontal && bar.root.musicTitle.length > 0
             anchors.right: parent.right
-            anchors.rightMargin: bar.cloudMode ? bar.cloudHAir + bar.cloudHPad : 10
+            anchors.rightMargin: (bar.cloudMode ? bar.cloudHAir + bar.cloudHPad : 10)
+                                + (recordingItem.visible ? recordingItem.width + 8 : 0)
             anchors.verticalCenter: parent.verticalCenter
             // Match the -1 optical lift applied to icons / clock so the
             // pill sits on the same baseline as the rest of the bar row.
@@ -273,11 +274,79 @@ PanelWindow {
             }
         }
 
+        // Only show a recorder control while capture is actually active.
+        // That makes its red state an unambiguous privacy indicator.
+        Item {
+            id: recordingItem
+            visible: bar.root.isHorizontal && bar.root.screenRecordingActive
+            anchors.right: parent.right
+            anchors.rightMargin: bar.cloudMode ? bar.cloudHAir + bar.cloudHPad : 10
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: -1
+            height: 16
+            width: recordingPill.width
+            z: 10
+
+            Rectangle {
+                id: recordingPill
+                anchors.verticalCenter: parent.verticalCenter
+                width: recordingRow.width + 18
+                height: parent.height
+                radius: height / 2
+                color: bar.root.seal
+                opacity: recordingMouse.containsMouse ? 1.0 : 0.92
+                Behavior on opacity { NumberAnimation { duration: 160 } }
+
+                Row {
+                    id: recordingRow
+                    anchors.centerIn: parent
+                    spacing: 5
+                    Text {
+                        text: "●"
+                        color: bar.root.paper
+                        font.family: bar.root.mono
+                        font.pixelSize: 10
+                    }
+                    Text {
+                        text: "REC " + bar.root.screenRecordingLabel()
+                        color: bar.root.paper
+                        font.family: bar.root.mono
+                        font.pixelSize: 10
+                        font.weight: Font.DemiBold
+                        font.letterSpacing: 0.8
+                    }
+                }
+            }
+
+            Timer {
+                id: recordingTipDelay
+                interval: 320
+                onTriggered: {
+                    const p = recordingItem.mapToItem(null, recordingItem.width / 2, recordingItem.height / 2);
+                    bar.root.showTooltip("Stop screen recording", p.x, p.y);
+                }
+            }
+            MouseArea {
+                id: recordingMouse
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onEntered: recordingTipDelay.restart()
+                onExited: { recordingTipDelay.stop(); bar.root.hideTooltip(); }
+                onClicked: {
+                    recordingTipDelay.stop();
+                    bar.root.hideTooltip();
+                    bar.root.stopScreenRecording();
+                }
+            }
+        }
+
         GridLayout {
             anchors.fill: parent
             anchors.leftMargin:   bar.root.isHorizontal ? (bar.cloudMode ? bar.cloudHAir + bar.cloudHPad : 10) : 0
             anchors.rightMargin:  bar.root.isHorizontal
                                   ? ((bar.cloudMode ? bar.cloudHAir + bar.cloudHPad : 10)
+                                     + (recordingItem.visible ? recordingItem.width + 8 : 0)
                                      + (musicItem.visible ? musicItem.width + 8 : 0))
                                   : 0
             anchors.topMargin:    bar.root.isHorizontal

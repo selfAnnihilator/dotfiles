@@ -9,10 +9,12 @@ CardWindow {
     cardWidth: 566
     layerNamespace: "zanken-screenshots"
     title: "SCREENSHOTS"
-    subtitle: screenshotsPopup.root.screenshotFiles.length === 0
-              ? "NO RECENT CAPTURES"
-              : "PAGE " + (screenshotsPopup.root.screenshotPage + 1) + " / " + screenshotsPopup.root.screenshotPageCount
-                + "  ·  " + screenshotsPopup.root.screenshotFiles.length + " TOTAL"
+    subtitle: screenshotsPopup.root.screenRecordingActive
+              ? "● REC " + screenshotsPopup.root.screenRecordingLabel() + "  ·  R TO STOP"
+              : screenshotsPopup.root.screenshotFiles.length === 0
+                ? "NO RECENT CAPTURES"
+                : "PAGE " + (screenshotsPopup.root.screenshotPage + 1) + " / " + screenshotsPopup.root.screenshotPageCount
+                  + "  ·  " + screenshotsPopup.root.screenshotFiles.length + " TOTAL"
 
     headerRight: Row {
         spacing: 12
@@ -74,6 +76,9 @@ CardWindow {
         } else if (k === Qt.Key_C) {
             const e = r.selectedScreenshotEntry;
             if (e) r.copyScreenshotToClipboard(e.path);
+        } else if (k === Qt.Key_R) {
+            if (r.screenRecordingActive) r.stopScreenRecording();
+            else r.startScreenRecording();
         } else {
             return;
         }
@@ -84,6 +89,60 @@ CardWindow {
         id: shotCol
         width: parent.width
         spacing: 12
+
+        Rectangle {
+            width: parent.width
+            height: 38
+            radius: screenshotsPopup.root.cornerRadius
+            color: screenshotsPopup.root.screenRecordingActive
+                   ? Qt.rgba(screenshotsPopup.root.seal.r, screenshotsPopup.root.seal.g, screenshotsPopup.root.seal.b, 0.16)
+                   : Qt.rgba(screenshotsPopup.root.ink.r, screenshotsPopup.root.ink.g, screenshotsPopup.root.ink.b, 0.04)
+            border.color: screenshotsPopup.root.screenRecordingActive ? screenshotsPopup.root.seal : screenshotsPopup.root.sep
+            border.width: 1
+            Behavior on color { ColorAnimation { duration: 160 } }
+            Behavior on border.color { ColorAnimation { duration: 160 } }
+
+            Text {
+                anchors.left: parent.left
+                anchors.leftMargin: 12
+                anchors.verticalCenter: parent.verticalCenter
+                text: screenshotsPopup.root.screenRecordingActive
+                      ? "● RECORDING  " + screenshotsPopup.root.screenRecordingLabel()
+                      : "CAPTURE CENTRE"
+                color: screenshotsPopup.root.screenRecordingActive ? screenshotsPopup.root.seal : screenshotsPopup.root.inkDeep
+                font.family: screenshotsPopup.root.mono
+                font.pixelSize: 10
+                font.letterSpacing: 1.8
+                font.weight: Font.Medium
+            }
+
+            Row {
+                anchors.right: parent.right
+                anchors.rightMargin: 5
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 5
+                QuickButton {
+                    root: screenshotsPopup.root
+                    glyph: ""
+                    label: "CAPTURE"
+                    padH: 10
+                    onClicked: screenshotsPopup.root.run("zanken-capture-screenshot")
+                }
+                QuickButton {
+                    root: screenshotsPopup.root
+                    glyph: screenshotsPopup.root.screenRecordingActive ? screenshotsPopup.root.icoStop : ""
+                    label: screenshotsPopup.root.screenRecordingActive ? "STOP" : "RECORD"
+                    selected: screenshotsPopup.root.screenRecordingActive
+                    padH: 10
+                    onClicked: {
+                        if (screenshotsPopup.root.screenRecordingActive)
+                            screenshotsPopup.root.stopScreenRecording();
+                        else
+                            screenshotsPopup.root.startScreenRecording();
+                    }
+                }
+            }
+        }
 
         Text {
             width: parent.width

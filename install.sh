@@ -197,7 +197,9 @@ if ! completed "zanken"; then
     mark_done "zanken"
 fi
 
-# ── 5. Dotfiles bare repo ────────────────────────────────────────
+# ── 5. Authoritative Niri + Quickshell config ────────────────────
+# The dotfiles bare repo owns the desktop configuration. Zanken owns the
+# runtime scripts and never supplies fallback Niri or Quickshell configs.
 if ! completed "dotfiles"; then
     if [ ! -d "$HOME/dotfiles" ]; then
         info "Setting up dotfiles..."
@@ -209,11 +211,13 @@ if ! completed "dotfiles"; then
         git --git-dir="$HOME/dotfiles" --work-tree="$HOME" fetch origin
         git --git-dir="$HOME/dotfiles" --work-tree="$HOME" reset --hard FETCH_HEAD
     fi
-    git --git-dir="$HOME/dotfiles" --work-tree="$HOME" checkout --force
+    git --git-dir="$HOME/dotfiles" --work-tree="$HOME" checkout --force main
     # Fix hardcoded username paths in configs (dotfiles authored on abhi's machine)
     if [ "$HOME" != "/home/abhi" ]; then
         sed -i "s|/home/abhi/|$HOME/|g" "$HOME/.config/niri/config.kdl" 2>/dev/null || true
     fi
+    [ -f "$HOME/.config/niri/config.kdl" ] || { echo "Niri config was not checked out" >&2; exit 1; }
+    [ -d "$HOME/.config/quickshell/desktop" ] || { echo "Quickshell config was not checked out" >&2; exit 1; }
     ok "Dotfiles applied"
     xdg-settings set default-web-browser org.qutebrowser.qutebrowser.desktop 2>/dev/null || true
     mark_done "dotfiles"

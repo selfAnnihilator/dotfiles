@@ -31,4 +31,5 @@ ShellRoot {
     NotificationToast  { root: nav }
     ClipboardPopup     { root: nav }
     TrayPopup          { root: nav }
+    JarvisApprovalPopup { root: nav }
 }
